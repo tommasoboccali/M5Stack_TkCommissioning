@@ -9,7 +9,7 @@
 #define MAXTEMPON 55
 #define MAXOPTIME 10000
 #define MAXHEATINGON 10
-#define MINHEATINGOFF 10
+#define MINHEATINGOFF 12
 
 unsigned int offset;
 unsigned int startsessiontime;
@@ -32,14 +32,14 @@ class Result{
 
 
 void printAlarm(const char* c){
-   M5.Lcd.clear(RED);  
+   M5.Lcd.clear(RED);
    M5.Lcd.setTextColor(BLACK);
    M5.Lcd.setTextSize(2);
    M5.Lcd.setCursor(0, 0);
    M5.Lcd.println(c);
 }
 void printMessage(const char* c){
-  M5.Lcd.clear(BLACK);  
+  M5.Lcd.clear(BLACK);
    M5.Lcd.setTextColor(YELLOW);
    M5.Lcd.setTextSize(2);
    M5.Lcd.setCursor(0, 0);
@@ -68,7 +68,7 @@ bool setRelaysToOn(){
   Serial.println("In setRelaysOn");
     for (int i=0; i< NUMRELAYS; ++i){
       if (setRelayToOn(i) == false){
-        printAlarm("Cannot operate on Relay "+(i+'0'));    
+        printAlarm("Cannot operate on Relay "+(i+'0'));
         Serial.println("Cannot operate on Relay "+(i+'0'));
         return false;
       }
@@ -127,12 +127,12 @@ bool initialize(){
   M5.Lcd.setCursor(3, 35);
   M5.Lcd.setTextColor(RED);
   bool initialized=false;
-  while (initialized == false) {  
+  while (initialized == false) {
     delay(2000);
     M5.update();
     M5.Lcd.print(".");
     if (M5.BtnA.wasReleased()) {
-    
+
       printMessage("Sequence to start in 2 sec");
       sleep(2);
       initialized=true;
@@ -144,7 +144,7 @@ bool initialize(){
 }
 
 void printResult(Result r){
-   M5.Lcd.clear(BLACK);  
+   M5.Lcd.clear(BLACK);
    M5.Lcd.setTextColor(YELLOW);
    M5.Lcd.setTextSize(3);
    M5.Lcd.setCursor(0, 0);
@@ -157,7 +157,7 @@ void printResult(Result r){
    M5.Lcd.print("Total (sec): ");
    sprintf(temp,"%d",r.timestamp-startsessiontime);
    M5.Lcd.println(temp);
-   
+
    sprintf(temp, "%3.1f", r.avgtemp);
    M5.Lcd.print("Avg. Temp (C): ");
    M5.Lcd.println(temp);
@@ -177,14 +177,14 @@ void printResult(Result r){
 void loopsetup() {
   Serial.println("entering leeopsetup");
 // put your setup code here, to run once:
-  // we are starting up 
+  // we are starting up
 
   startsessiontime = (unsigned int) time(NULL);
   if (getState() != Off){
     setState(Off);
   }
    initialize();
-   if (setStateFromTo(Off,Initialized) == false) { 
+   if (setStateFromTo(Off,Initialized) == false) {
     printAlarm("Error initializing");
     exit(1);
   } else {
@@ -201,7 +201,7 @@ void loopsetup() {
 
 void setup() {
   // put your setup code here, to run once:
-  // we are starting up 
+  // we are starting up
   M5.Power.begin();
   Serial.begin(115200);
   Serial.println("Setup");
@@ -214,7 +214,7 @@ Result getResult(){
   r.timestamp = tstamp;
   r.timestate = (unsigned int) time(NULL)-offset;
   r.avgtemp = readAvgTemp();
-  return r;  
+  return r;
 }
 
 float readAvgTemp(){
@@ -229,7 +229,7 @@ Serial.println("HEATNGOOOON");
       printAlarm("Cannot set relays to on");
       exit(5);
      }
-     
+
      bool res3 = setState(HeatingOn);
      if (res3 == false){
       printAlarm("Cannot move to state HeatingOn.");
@@ -242,8 +242,8 @@ Serial.println("HEATNGOOOON");
 
 bool goToHeatingOn(){
   // read temp
-  
-     
+
+
      float temp = readAvgTemp();
      if (temp<TEMPINIMIN || temp>TEMPINIMAX){
       printAlarm("Initial temperature not within limits.");
@@ -259,7 +259,7 @@ bool reallyGoToHeatingOff(){
       printAlarm("Cannot set relays to on");
       exit(5);
      }
-     
+
      bool res3 = setState(HeatingOff);
      if (res3 == false){
       printAlarm("Cannot move to state HeatingOn.");
@@ -277,7 +277,7 @@ bool goToHeatingOff(){
      }
      return reallyGoToHeatingOff();
 }
-  
+
 bool storeResult(Result r){
 }
 
@@ -313,12 +313,12 @@ void loop() {
   State g=getState();
 
 
-  
+
   if ( g == Off ){
     loopsetup();
   }
   delay(1000);
-  Result r= getResult();  
+  Result r= getResult();
 
   printResult(r);
   storeResult(r);
@@ -345,7 +345,7 @@ bool res2 = setRelaysToOff();
   if (g == Initialized || (g==HeatingOff && (((unsigned int)(time(NULL)))-offset>MINHEATINGOFF))){
      bool res2 = goToHeatingOn();
   }
- 
+
   if (g == HeatingOn){
     //eventually go to HeatingOff after some time / temperature
     float temp = readAvgTemp();
@@ -356,5 +356,5 @@ bool res2 = setRelaysToOff();
     }
  }
  //done
- 
+
 }

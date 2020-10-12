@@ -8,6 +8,8 @@
 #define TEMPINIMAX 25
 #define MAXTEMPON 55
 #define MAXOPTIME 10000
+#define MAXHEATINGON 10
+#define MINHEATINGOFF 10
 
 unsigned int offset;
 unsigned int startsessiontime;
@@ -15,11 +17,16 @@ unsigned int startsessiontime;
 enum State {Off, Initialized, HeatingOn, HeatingOff, DumpResults};
 enum State _state;
 
+char *strStates[5] = {"Off", "Initialized", "HeatingOn", "HeatingOff" ,"DumpResults"};
+
+
+
 class Result{
   public:
     float sensorReadings[NUMSENSORS];
     unsigned int timestamp;
     unsigned int timestate;
+    float avgtemp;
     bool relays[NUMRELAYS];
 };
 
@@ -42,6 +49,9 @@ void printMessage(const char* c){
 bool setState(State s){
   _state = s;
   offset = (unsigned int) time(NULL);
+  Serial.println("----------------setState ");
+  Serial.println(s);
+  delay(1000);
   return true;
 }
 
@@ -55,15 +65,19 @@ bool setRelayToOff(int i){
 }
 
 bool setRelaysToOn(){
+  Serial.println("In setRelaysOn");
     for (int i=0; i< NUMRELAYS; ++i){
       if (setRelayToOn(i) == false){
-        printAlarm("Cannot operate on Relay "+(i+'0'));
+        printAlarm("Cannot operate on Relay "+(i+'0'));    
+        Serial.println("Cannot operate on Relay "+(i+'0'));
         return false;
       }
     }
+    Serial.println("Exiting setRelaysOn");
     return true;
 }
 bool setRelaysToOff(){
+  Serial.println("In setRelaysToOff!");
     for (int i=0; i< NUMRELAYS; ++i){
       if (setRelayToOff(i) == false){
         printAlarm("Cannot operate on Relay "+(i+'0'));
@@ -94,7 +108,8 @@ bool setStateFromTo(State f, State t){
 bool initialize(){
 // init lcd, serial, but don't init sd card
   M5.begin(true, false, true);
-  
+   Serial.println("In initialize");
+
   /*
     Power chip connected to gpio21, gpio22, I2C device
     Set battery charging voltage and current
@@ -106,6 +121,7 @@ bool initialize(){
      return false;
   }
   M5.Power.begin();
+   Serial.println("In initialize1");
 
   printMessage("Btn A for 1 sec to start");
   M5.Lcd.setCursor(3, 35);
@@ -117,17 +133,49 @@ bool initialize(){
     M5.Lcd.print(".");
     if (M5.BtnA.wasReleased()) {
     
-      printMessage("Sequence to start in 5 sec");
-      sleep(5);
+      printMessage("Sequence to start in 2 sec");
+      sleep(2);
       initialized=true;
     }
   }
+     Serial.println("In initialize2");
+
   return true;
 }
 
+void printResult(Result r){
+   M5.Lcd.clear(BLACK);  
+   M5.Lcd.setTextColor(YELLOW);
+   M5.Lcd.setTextSize(3);
+   M5.Lcd.setCursor(0, 0);
+   M5.Lcd.print ("State ");
+   M5.Lcd.println(strStates[getState()]);
+   M5.Lcd.print("Since (sec): ");
+   char temp[24];
+   sprintf(temp,"%d",r.timestate);
+   M5.Lcd.println(temp);
+   M5.Lcd.print("Total (sec): ");
+   sprintf(temp,"%d",r.timestamp-startsessiontime);
+   M5.Lcd.println(temp);
+   
+   sprintf(temp, "%3.1f", r.avgtemp);
+   M5.Lcd.print("Avg. Temp (C): ");
+   M5.Lcd.println(temp);
+   M5.Lcd.print("Heaters: ");
+   for (int i=0; i< NUMRELAYS; ++i){
+    if (r.relays[i] == true){
+      temp[i]='1';
+    }else{
+      temp[i]='0';
+    }
+    temp[NUMRELAYS]='\0';
+    M5.Lcd.println(temp);
+   }
 
+}
 
 void loopsetup() {
+  Serial.println("entering leeopsetup");
 // put your setup code here, to run once:
   // we are starting up 
 
@@ -136,8 +184,7 @@ void loopsetup() {
     setState(Off);
   }
    initialize();
-   printMessage("Initialized");
-  if (setStateFromTo(Off,Initialized) == false) { 
+   if (setStateFromTo(Off,Initialized) == false) { 
     printAlarm("Error initializing");
     exit(1);
   } else {
@@ -149,13 +196,15 @@ void loopsetup() {
       }
    }
   }
-  M5.Lcd.println("here");
+  Serial.println("exiting leeopsetup");
 }
 
 void setup() {
   // put your setup code here, to run once:
   // we are starting up 
   M5.Power.begin();
+  Serial.begin(115200);
+  Serial.println("Setup");
   setState(Off);
 }
 
@@ -163,18 +212,18 @@ Result getResult(){
   int tstamp = (unsigned) time (NULL);
   Result r =Result();
   r.timestamp = tstamp;
-  return r;
   r.timestate = (unsigned int) time(NULL)-offset;
+  r.avgtemp = readAvgTemp();
   return r;  
 }
 
 float readAvgTemp(){
 //fixme
-return 12.;
+return 14.;
 }
 
 bool reallyGoToHeatingOn(){
-
+Serial.println("HEATNGOOOON");
      bool res2 = setRelaysToOn();
      if (res2 == false){
       printAlarm("Cannot set relays to on");
@@ -193,6 +242,8 @@ bool reallyGoToHeatingOn(){
 
 bool goToHeatingOn(){
   // read temp
+  
+     
      float temp = readAvgTemp();
      if (temp<TEMPINIMIN || temp>TEMPINIMAX){
       printAlarm("Initial temperature not within limits.");
@@ -226,9 +277,6 @@ bool goToHeatingOff(){
      }
      return reallyGoToHeatingOff();
 }
-
-bool printResult(Result r){
-}
   
 bool storeResult(Result r){
 }
@@ -236,6 +284,8 @@ bool storeResult(Result r){
 
 void loop() {
   delay(200);
+  Serial.print("Entering LOOP");
+  Serial.println(getState());
   // put your setup code here, to run once:
   M5.begin(true, false, true);
  //M5.Lcd.setCursor(3, 35);
@@ -263,13 +313,11 @@ void loop() {
   State g=getState();
 
 
-  M5.Lcd.println("here2");
   
   if ( g == Off ){
     loopsetup();
   }
-  M5.Lcd.println("here3");
-  delay(2000);
+  delay(1000);
   Result r= getResult();  
 
   printResult(r);
@@ -278,7 +326,7 @@ M5.update();
   if (M5.BtnA.wasPressed()) {
 bool res2 = setRelaysToOff();
     if (res2 == false){
-      printAlarm("Cannot set relays to off");
+      printAlarm("Cannot set relays to off_");
       exit(7);
     }
     bool res3 = setState(Off);
@@ -294,15 +342,16 @@ bool res2 = setRelaysToOff();
   if (M5.BtnC.wasPressed()) {
     bool res2 = reallyGoToHeatingOff();
   }
-
-  if (g == Initialized){
+  if (g == Initialized || (g==HeatingOff && (((unsigned int)(time(NULL)))-offset>MINHEATINGOFF))){
      bool res2 = goToHeatingOn();
-     }
+  }
  
   if (g == HeatingOn){
     //eventually go to HeatingOff after some time / temperature
     float temp = readAvgTemp();
-    if (temp > MAXTEMPON) {
+    if (temp > MAXTEMPON || (((unsigned int)(time(NULL)))-offset>MAXHEATINGON)  ) {
+      Serial.println("Switching heating off");
+
       bool res2 = goToHeatingOff();
     }
  }

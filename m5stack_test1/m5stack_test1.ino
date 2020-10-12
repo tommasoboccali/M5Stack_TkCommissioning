@@ -12,7 +12,7 @@
 unsigned int offset;
 unsigned int startsessiontime;
 
-enum State {Off, NotInitialized, Initialized, HeatingOn, HeatingOff, DumpResults};
+enum State {Off, Initialized, HeatingOn, HeatingOff, DumpResults};
 enum State _state;
 
 class Result{
@@ -28,14 +28,14 @@ void printAlarm(const char* c){
    M5.Lcd.clear(RED);  
    M5.Lcd.setTextColor(BLACK);
    M5.Lcd.setTextSize(2);
-   M5.Lcd.setCursor(65, 10);
+   M5.Lcd.setCursor(0, 0);
    M5.Lcd.println(c);
 }
 void printMessage(const char* c){
   M5.Lcd.clear(BLACK);  
    M5.Lcd.setTextColor(YELLOW);
    M5.Lcd.setTextSize(2);
-   M5.Lcd.setCursor(65, 10);
+   M5.Lcd.setCursor(0, 0);
    M5.Lcd.println(c);
 }
 
@@ -107,13 +107,16 @@ bool initialize(){
   }
   M5.Power.begin();
 
-  printMessage("System Initialized");
+  printMessage("Btn A for 1 sec to start");
   M5.Lcd.setCursor(3, 35);
-  M5.Lcd.println("Press button B for 700ms to start sequence");
   M5.Lcd.setTextColor(RED);
   bool initialized=false;
-  while (initialized == false) {
-    if (M5.BtnB.wasReleasefor(700)) {
+  while (initialized == false) {  
+    delay(2000);
+    M5.update();
+    M5.Lcd.print(".");
+    if (M5.BtnA.wasReleased()) {
+    
       printMessage("Sequence to start in 5 sec");
       sleep(5);
       initialized=true;
@@ -124,17 +127,17 @@ bool initialize(){
 
 
 
-void setup() {
-  // put your setup code here, to run once:
+void loopsetup() {
+// put your setup code here, to run once:
   // we are starting up 
-  M5.Power.begin();
+
   startsessiontime = (unsigned int) time(NULL);
   if (getState() != Off){
     setState(Off);
   }
-    initialize();
+   initialize();
+   printMessage("Initialized");
   if (setStateFromTo(Off,Initialized) == false) { 
-//    M5.Power.begin();
     printAlarm("Error initializing");
     exit(1);
   } else {
@@ -146,7 +149,14 @@ void setup() {
       }
    }
   }
+  M5.Lcd.println("here");
+}
 
+void setup() {
+  // put your setup code here, to run once:
+  // we are starting up 
+  M5.Power.begin();
+  setState(Off);
 }
 
 Result getResult(){
@@ -225,7 +235,20 @@ bool storeResult(Result r){
 
 
 void loop() {
+  delay(200);
+  // put your setup code here, to run once:
+  M5.begin(true, false, true);
+ //M5.Lcd.setCursor(3, 35);
+  //M5.Lcd.println("Press buttons");
+  //M5.Lcd.setTextColor(RED);
+   // M5.update();
 
+//while(1==1){
+ // if(M5.BtnA.wasPressed()) M5.Lcd.println("Button A");
+  //if(M5.BtnB.wasPressed()) M5.Lcd.println("Button B");
+  //if(M5.BtnC.wasPressed()) M5.Lcd.println("Button C");
+  //M5.update();
+//}
   //
   // time out!
   //
@@ -238,19 +261,22 @@ void loop() {
   //B = set Heating On
   //C = set Heating Off
   State g=getState();
+
+
+  M5.Lcd.println("here2");
   
   if ( g == Off ){
-    setup();
+    loopsetup();
   }
-
+  M5.Lcd.println("here3");
+  delay(2000);
   Result r= getResult();  
 
   printResult(r);
   storeResult(r);
-
-  if (M5.BtnA.wasReleased()) {
-    // going Off
-    bool res2 = setRelaysToOff();
+M5.update();
+  if (M5.BtnA.wasPressed()) {
+bool res2 = setRelaysToOff();
     if (res2 == false){
       printAlarm("Cannot set relays to off");
       exit(7);
@@ -260,11 +286,12 @@ void loop() {
       printAlarm("Cannot go Off");
       exit(8);
     }
+    M5.Lcd.println("going off");
   }
-  if (M5.BtnB.wasReleased()) {
+  if (M5.BtnB.wasPressed()) {
     bool res2 = reallyGoToHeatingOn();
   }
-  if (M5.BtnC.wasReleased()) {
+  if (M5.BtnC.wasPressed()) {
     bool res2 = reallyGoToHeatingOff();
   }
 

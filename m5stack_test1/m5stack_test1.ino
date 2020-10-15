@@ -265,6 +265,7 @@ void setup() {
   timeClient.begin();
   server.on("/",handle_OnConnect);
   server.on("/ls",handle_ls);
+  server.on("/dl",handle_dl);
   server.begin();
   Serial.println("HTTP Server started.");
 
@@ -450,6 +451,34 @@ void handle_ls(){
   server.send(200,"text/html",sendls());
 }
 
+void handle_dl(){
+  server.send(200,"text/plain",sendFile());
+}
+
+String sendFile(){
+  String ptr;
+  if (server.hasArg("name")) {
+    String name=String(server.arg("name"));
+   // open file
+    File file = SD.open(name,FILE_READ);
+    if(!file){
+        Serial.println("Failed to open "+name);
+        return ptr;
+    }
+    while (file.available()){
+    int pippo =  file.read();
+     ptr+= char(pippo);
+     Serial.println(pippo);
+    }
+    file.close();
+        
+  }
+  return ptr;
+}
+
+
+
+
 String sendls(){
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
@@ -465,10 +494,11 @@ String sendls(){
   ptr +="</style>\n";
   ptr +="</head>\n";
   ptr +="<body>\n";
+String temp;
 
-   ptr+=String("LS goes here")+String("<br>\n");
+   temp=String("LS goes here")+String("<br>\n");
    listDir(ptr,SD, "/",0);
-   
+   Serial.println(temp);
   ptr +="</body>\n";
   ptr +="</html>\n";
   return ptr;
@@ -532,7 +562,7 @@ bool printOnFile(File file){
     file.print(" timeState ");
     file.print(r.timestate);
     file.print(" heaters ");
-    for (int j=0; j<NUMSENSORS; ++j){
+    for (int j=0; j<NUMRELAYS; ++j){
        if (r.relays[j] == true){
           file.print('1');
        }else{
@@ -575,6 +605,11 @@ void appendLogs(){
 
 
 void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
+
+//http://10.0.37.12/dl?name=/tklog_1602755604.txt
+
+  Serial.println("Starting LS");
+    
     ptr+="Listing directory /<br>\n";;
 
     File root = fs.open(dirname);
@@ -582,13 +617,16 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
         ptr+="Failed to open directory<br>\n";
         return;
     }
+
+    
     if(!root.isDirectory()){
         ptr+="Not a directory<br>\n";
         return;
     }
-
+   
     File file = root.openNextFile();
     while(file){
+   
         if(file.isDirectory()){
             ptr+="  DIR : ";
             ptr+=String(file.name())+"<br>\n";
@@ -596,10 +634,10 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
                 listDir(ptr,fs, file.name(), levels -1);
             }
         } else {
+\   
             ptr+="  FILE: ";
             ptr+=file.name();
-            ptr+="  SIZE: ";
-            ptr+=file.size()+"<br>\n";
+            ptr+=String("  SIZE ")+String(file.size())+  "<a href=\"/dl?name="+file.name()+"\"> DL </a>  <br>\n";
         }
         file = root.openNextFile();
     }

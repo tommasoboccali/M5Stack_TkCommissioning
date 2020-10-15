@@ -264,6 +264,7 @@ void setup() {
 // Initialize a NTPClient to get time
   timeClient.begin();
   server.on("/",handle_OnConnect);
+  server.on("/ls",handle_ls);
   server.begin();
   Serial.println("HTTP Server started.");
 
@@ -445,6 +446,33 @@ bool res2 = setRelaysToOff();
 void handle_OnConnect(){
   server.send(200,"text/html",sendResult(getResult()));
 }
+void handle_ls(){
+  server.send(200,"text/html",sendls());
+}
+
+String sendls(){
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
+  ptr +="<title>LED Control</title>\n";
+  ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
+  ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
+  ptr +=".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
+  ptr +=".button-on {background-color: #3498db;}\n";
+  ptr +=".button-on:active {background-color: #2980b9;}\n";
+  ptr +=".button-off {background-color: #34495e;}\n";
+  ptr +=".button-off:active {background-color: #2c3e50;}\n";
+  ptr +="p {font-size: 14px;color: #888;margin-bottom: 10px;}\n";
+  ptr +="</style>\n";
+  ptr +="</head>\n";
+  ptr +="<body>\n";
+
+   ptr+=String("LS goes here")+String("<br>\n");
+   listDir(ptr,SD, "/",0);
+   
+  ptr +="</body>\n";
+  ptr +="</html>\n";
+  return ptr;
+}
 
 String sendResult(Result r){
   String ptr = "<!DOCTYPE html> <html>\n";
@@ -462,7 +490,32 @@ String sendResult(Result r){
   ptr +="</head>\n";
   ptr +="<body>\n";
   ptr +="<h1>ESP32 Web Server</h1>\n";
-  ptr +="<h3>Using Access Point(AP) Mode</h3>\n";
+  ptr +="<h2>IP ADDRESS: "+String(WiFi.localIP())+"</h2>\n";
+
+
+  ptr+= "Timestamp = ";
+  ptr+= String(r.timestamp);
+  ptr+= "<br>\n";
+
+  ptr+= "State = ";
+  ptr+= String(strStates[r.state]); 
+  ptr+= "<br>\n"; 
+
+  ptr+= "State since = "+ String(r.timestate)+" sec<br>\n";
+
+  ptr+= "Total time from start = "+ String(r.timestamp-startsessiontime)+" sec<br>\n";
+  
+  ptr+= "Average Temperature (C) = "+ String(r.avgtemp)+" sec<br>\n";
+
+  for (int i=0; i< NUMRELAYS; ++i){
+       ptr+= "Relay "+String(i)+ "  Status " +String(r.relays[i])+"<br>\n";
+
+  }
+  for (int i=0; i< NUMSENSORS; ++i){
+       ptr+= "Sensor "+String(i)+ "  Reading (C) " +String(r.sensorReadings[i])+"<br>\n";
+
+  }
+  
   
   ptr +="</body>\n";
   ptr +="</html>\n";
@@ -519,3 +572,35 @@ void appendLogs(){
     //float avgtemp;
     //bool relays[NUMRELAYS];
 //};
+
+
+void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
+    ptr+="Listing directory /<br>\n";;
+
+    File root = fs.open(dirname);
+    if(!root){
+        ptr+="Failed to open directory<br>\n";
+        return;
+    }
+    if(!root.isDirectory()){
+        ptr+="Not a directory<br>\n";
+        return;
+    }
+
+    File file = root.openNextFile();
+    while(file){
+        if(file.isDirectory()){
+            ptr+="  DIR : ";
+            ptr+=String(file.name())+"<br>\n";
+            if(levels){
+                listDir(ptr,fs, file.name(), levels -1);
+            }
+        } else {
+            ptr+="  FILE: ";
+            ptr+=file.name();
+            ptr+="  SIZE: ";
+            ptr+=file.size()+"<br>\n";
+        }
+        file = root.openNextFile();
+    }
+}

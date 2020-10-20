@@ -218,7 +218,7 @@ void loopsetup() {
     setState(Off);
   }
    initialize();
-   if (setStateFromTo(Off,Initialized) == false) {
+   if (setStateFromTo(Off,Initialized) == false) { 
     printAlarm("Error initializing");
     exit(1);
   } else {

@@ -252,6 +252,11 @@ void setup() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
+  M5.Lcd.clear(RED);
+  M5.Lcd.setTextColor(YELLOW);
+  M5.Lcd.setTextSize(2);
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.println("Trying to connect wo wifi....");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -266,6 +271,7 @@ void setup() {
   server.on("/",handle_OnConnect);
   server.on("/ls",handle_ls);
   server.on("/dl",handle_dl);
+  server.on("/rm",handle_rm);
   server.begin();
   Serial.println("HTTP Server started.");
 
@@ -454,6 +460,9 @@ void handle_ls(){
 void handle_dl(){
   server.send(200,"text/plain",sendFile());
 }
+void handle_rm(){
+  server.send(200,"text/plain",sendRemove());
+}
 
 String sendFile(){
   String ptr;
@@ -472,6 +481,19 @@ String sendFile(){
     }
     file.close();
         
+  }
+  return ptr;
+}
+
+String sendRemove(){
+  String ptr;
+  ptr+="Removing file ";
+  if (server.hasArg("name")) {
+    String name=String(server.arg("name"));
+   // open file
+   ptr+=name;
+   ptr+="  ";
+    SD.remove(name);
   }
   return ptr;
 }
@@ -545,6 +567,9 @@ String sendResult(Result r){
        ptr+= "Sensor "+String(i)+ "  Reading (C) " +String(r.sensorReadings[i])+"<br>\n";
 
   }
+
+ptr+="<br><br><br>\n";
+ptr+=" <a href=\"/ls\"> Directory Listing </a> ";
   
   
   ptr +="</body>\n";
@@ -610,7 +635,7 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
 
   Serial.println("Starting LS");
     
-    ptr+="Listing directory /<br>\n";;
+    ptr+="Listing directory /<br><br><br>\n";;
 
     File root = fs.open(dirname);
     if(!root){
@@ -634,10 +659,10 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
                 listDir(ptr,fs, file.name(), levels -1);
             }
         } else {
-\   
+   
             ptr+="  FILE: ";
             ptr+=file.name();
-            ptr+=String("  SIZE ")+String(file.size())+  "<a href=\"/dl?name="+file.name()+"\"> DL </a>  <br>\n";
+            ptr+=String("  SIZE ")+String(file.size())+  "<a href=\"/dl?name="+file.name()+"\"> Download </a>  <a href=\"/rm?name="+file.name()+"\"> Remove </a>  <br>\n";
         }
         file = root.openNextFile();
     }

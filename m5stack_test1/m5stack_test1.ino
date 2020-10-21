@@ -157,13 +157,14 @@ bool initialize(){
     M5.update();
     M5.Lcd.print(".");
     if (M5.BtnA.wasReleased()) {
+    char buffer[100];
+    sprintf(buffer, "IP %s\n", WiFi.localIP().toString().c_str());
 
-      printMessage("Sequence to start in 2 sec");
+      printMessage(buffer);
       sleep(2);
       initialized=true;
     }
   }
-     Serial.println("In initialize2");
 
   return true;
 }
@@ -203,9 +204,26 @@ void printResult(Result r){
   M5.Lcd.setTextColor(BLUE);
   M5.Lcd.setTextSize(2);
   M5.Lcd.println();
-  M5.Lcd.println();
+  char buffer[100];
+  sprintf(buffer, "IP %s\n", WiFi.localIP().toString().c_str());
+  byte mac[6];
+  WiFi.macAddress(mac);
+  Serial.print("MAC: ");
+  Serial.print(mac[5],HEX);
+  Serial.print(":");
+  Serial.print(mac[4],HEX);
+  Serial.print(":");
+  Serial.print(mac[3],HEX);
+  Serial.print(":");
+  Serial.print(mac[2],HEX);
+  Serial.print(":");
+  Serial.print(mac[1],HEX);
+  Serial.print(":");
+  Serial.println(mac[0],HEX);
+  M5.Lcd.println(buffer);
   M5.Lcd.println();
   M5.Lcd.println("A:Off   B:Hon   C:Hoff");
+
 }
 
 void loopsetup() {
@@ -252,11 +270,7 @@ void setup() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
-  M5.Lcd.clear(RED);
-  M5.Lcd.setTextColor(YELLOW);
-  M5.Lcd.setTextSize(2);
-  M5.Lcd.setCursor(0, 0);
-  M5.Lcd.println("Trying to connect wo wifi....");
+  
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -266,7 +280,7 @@ void setup() {
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-// Initialize a NTPClient to get time
+  // Initialize a NTPClient to get time
   timeClient.begin();
   server.on("/",handle_OnConnect);
   server.on("/ls",handle_ls);
@@ -504,7 +518,7 @@ String sendRemove(){
 String sendls(){
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-  ptr +="<title>LED Control</title>\n";
+  ptr +="<title>Tk Tests Pisa</title>\n";
   ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
   ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
   ptr +=".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
@@ -542,7 +556,10 @@ String sendResult(Result r){
   ptr +="</head>\n";
   ptr +="<body>\n";
   ptr +="<h1>ESP32 Web Server</h1>\n";
-  ptr +="<h2>IP ADDRESS: "+String(WiFi.localIP())+"</h2>\n";
+  char buffer[100];
+  sprintf(buffer, "IP %s\n", WiFi.localIP().toString().c_str());
+
+  ptr +="<h2>IP ADDRESS: "+String(buffer)+"</h2>\n";
 
 
   ptr+= "Timestamp = ";

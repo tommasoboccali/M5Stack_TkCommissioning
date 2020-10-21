@@ -156,7 +156,7 @@ bool initialize(){
     delay(2000);
     M5.update();
     M5.Lcd.print(".");
-    if (M5.BtnA.wasReleased()) {
+    if (M5.BtnA.wasPressed()) {
     char buffer[100];
     sprintf(buffer, "IP %s\n", WiFi.localIP().toString().c_str());
 
@@ -283,6 +283,8 @@ void setup() {
   // Initialize a NTPClient to get time
   timeClient.begin();
   server.on("/",handle_OnConnect);
+  server.on("/off",handle_off);
+  
   server.on("/ls",handle_ls);
   server.on("/dl",handle_dl);
   server.on("/rm",handle_rm);
@@ -348,9 +350,9 @@ bool goToHeatingOn(){
 
 
 bool reallyGoToHeatingOff(){
-  bool res2 = setRelaysToOn();
+  bool res2 = setRelaysToOff();
      if (res2 == false){
-      printAlarm("Cannot set relays to on");
+      printAlarm("Cannot set relays to off");
       exit(5);
      }
 
@@ -424,8 +426,12 @@ void loop() {
 
   if (loopNO % 5000 == 0){
     printResult(r);
+  }
+if (loopNO % 50000 == 0){
     storeResult(r);
   }
+
+  
 M5.update();
   if (M5.BtnA.wasPressed()) {
 bool res2 = setRelaysToOff();
@@ -464,6 +470,9 @@ bool res2 = setRelaysToOff();
 }
 
 
+void handle_off(){
+  server.send(200,"text/html",sendOff());
+}
 void handle_OnConnect(){
   server.send(200,"text/html",sendResult(getResult()));
 }
@@ -499,6 +508,24 @@ String sendFile(){
   return ptr;
 }
 
+
+
+String sendOff(){
+  String ptr;
+  ptr+="Stopping System...<br>\n";
+  bool res2 = setRelaysToOff();
+  if (res2 == false){
+      ptr+="Cannot set relays to off<br>\n";
+      return (ptr);
+    }
+    bool res3 = setState(Off);
+    if (res3 == false){
+      ptr+="Cannot set state to Off<br>\n";
+      return (ptr);
+    }
+  ptr+="Now We are off<br>\n";
+  return ptr;
+}
 String sendRemove(){
   String ptr;
   ptr+="Removing file ";
@@ -587,6 +614,8 @@ String sendResult(Result r){
 
 ptr+="<br><br><br>\n";
 ptr+=" <a href=\"/ls\"> Directory Listing </a> ";
+ptr+="<br><br><br>\n";
+ptr+=" <a href=\"/off\"> <button>Switch all systems to Off</button> </a> ";
   
   
   ptr +="</body>\n";

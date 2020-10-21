@@ -147,7 +147,7 @@ bool initialize(){
      return false;
   }
   M5.Power.begin();
-   
+
   printMessage("Btn A for 1 sec to start");
   M5.Lcd.setCursor(3, 35);
   M5.Lcd.setTextColor(RED);
@@ -236,7 +236,7 @@ void loopsetup() {
     setState(Off);
   }
    initialize();
-   if (setStateFromTo(Off,Initialized) == false) { 
+   if (setStateFromTo(Off,Initialized) == false) {
     printAlarm("Error initializing");
     exit(1);
   } else {
@@ -257,7 +257,7 @@ strcat(file_name,filename_prefix);
 strcat(file_name,temp);
 strcat(file_name,".txt");
 Serial.print("SD FileName is ");
-Serial.println(file_name);     
+Serial.println(file_name);
 }
 
 void setup() {
@@ -270,7 +270,7 @@ void setup() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
-  
+
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -284,7 +284,7 @@ void setup() {
   timeClient.begin();
   server.on("/",handle_OnConnect);
   server.on("/off",handle_off);
-  
+
   server.on("/ls",handle_ls);
   server.on("/dl",handle_dl);
   server.on("/rm",handle_rm);
@@ -309,7 +309,7 @@ Result getResult(){
   r.state = getState();
   r.avgtemp = readAvgTemp();
   for (int i=0; i< NUMRELAYS; ++i){
-   r.relays[i] = heaters[i]; 
+   r.relays[i] = heaters[i];
   }
   return r;
 }
@@ -402,7 +402,7 @@ void loop() {
   Serial.print(timeClient.getEpochTime());
   Serial.print ("  TempAvg = ");
   Serial.println(readAvgTemp());
-    } 
+    }
   // put your setup code here, to run once:
   M5.begin(true, false, true);
   M5.update();
@@ -431,7 +431,7 @@ if (loopNO % 50000 == 0){
     storeResult(r);
   }
 
-  
+
 M5.update();
   if (M5.BtnA.wasPressed()) {
 bool res2 = setRelaysToOff();
@@ -503,7 +503,7 @@ String sendFile(){
      Serial.println(pippo);
     }
     file.close();
-        
+
   }
   return ptr;
 }
@@ -570,7 +570,7 @@ String temp;
 String sendResult(Result r){
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-  ptr +="<title>LED Control</title>\n";
+  ptr +="<title>Tk Pisa tests</title>\n";
   ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
   ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
   ptr +=".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
@@ -594,13 +594,13 @@ String sendResult(Result r){
   ptr+= "<br>\n";
 
   ptr+= "State = ";
-  ptr+= String(strStates[r.state]); 
-  ptr+= "<br>\n"; 
+  ptr+= String(strStates[r.state]);
+  ptr+= "<br>\n";
 
   ptr+= "State since = "+ String(r.timestate)+" sec<br>\n";
 
   ptr+= "Total time from start = "+ String(r.timestamp-startsessiontime)+" sec<br>\n";
-  
+
   ptr+= "Average Temperature (C) = "+ String(r.avgtemp)+" sec<br>\n";
 
   for (int i=0; i< NUMRELAYS; ++i){
@@ -616,8 +616,8 @@ ptr+="<br><br><br>\n";
 ptr+=" <a href=\"/ls\"> Directory Listing </a> ";
 ptr+="<br><br><br>\n";
 ptr+=" <a href=\"/off\"> <button>Switch all systems to Off</button> </a> ";
-  
-  
+
+
   ptr +="</body>\n";
   ptr +="</html>\n";
   return ptr;
@@ -651,7 +651,7 @@ bool printOnFile(File file){
 
 void appendLogs(){
   Serial.println("In AppendLogs");
-  File file = SD.open(file_name, FILE_APPEND); 
+  File file = SD.open(file_name, FILE_APPEND);
 
   if(!file) {
     Serial.print("Failed to open file for appending:");
@@ -659,7 +659,7 @@ void appendLogs(){
     return;
   }
   Serial.println("Printing in  AppendLogs");
-  
+
   bool ok  = printOnFile(file);
 
   file.close();
@@ -680,7 +680,7 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
 //http://10.0.37.12/dl?name=/tklog_1602755604.txt
 
   Serial.println("Starting LS");
-    
+
     ptr+="Listing directory /<br><br><br>\n";;
 
     File root = fs.open(dirname);
@@ -689,15 +689,15 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
         return;
     }
 
-    
+
     if(!root.isDirectory()){
         ptr+="Not a directory<br>\n";
         return;
     }
-   
+
     File file = root.openNextFile();
     while(file){
-   
+
         if(file.isDirectory()){
             ptr+="  DIR : ";
             ptr+=String(file.name())+"<br>\n";
@@ -705,7 +705,7 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
                 listDir(ptr,fs, file.name(), levels -1);
             }
         } else {
-   
+
             ptr+="  FILE: ";
             ptr+=file.name();
             ptr+=String("  SIZE ")+String(file.size())+  "<a href=\"/dl?name="+file.name()+"\"> Download </a>  <a href=\"/rm?name="+file.name()+"\"> Remove </a>  <br>\n";

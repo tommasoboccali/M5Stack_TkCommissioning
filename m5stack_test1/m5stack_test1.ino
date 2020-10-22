@@ -9,7 +9,15 @@
 
 WebServer server(80);
 
-#define NUMSENSORS 15
+#define  SENSADDRLENGHT 8
+const uint8_t sensorAddressList[][SENSADDRLENGHT]={
+  {0x28, 0x48, 0x96, 0x30, 0x09, 0x00, 0x00, 0x27}, // sensors #1
+  {0x28, 0x0D, 0x70, 0x56, 0xB5, 0x01, 0x3C, 0xB8}, // sensors #2
+//  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // sensors #3
+//  {0x01, 0x10, 0x10, 0x03, 0x02, 0x10, 0x30, 0x20}, // sensors #4
+//  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // sensors #5
+  };
+const size_t NUMSENSORS = sizeof(sensorAddressList)/sizeof(sensorAddressList[0]);
 #define NUMRELAYS 2
 #define TEMPINIMIN 12
 #define TEMPINIMAX 25
@@ -22,6 +30,7 @@ WebServer server(80);
 
 unsigned int numreadings;
 unsigned int offset;
+unsigned int lastupdatetime;
 unsigned int startsessiontime;
 unsigned int loopNO;
 
@@ -30,15 +39,19 @@ unsigned int loopNO;
 #include <WiFiUdp.h>
 
 // Replace with your network credentials
-const char* ssid     = "tbtc";
-const char* password = "pippo345";
+//const char* ssid     = "tbtc";
+//const char* password = "pippo345";
+const char* ssid     = "InfostradaWiFi-D-2GHz";
+const char* password = "InternetCasaDonat0$";
 
 const  char* filename_prefix = "tklog_";
 char file_name[30];
 
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
+
+//NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
+NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
 enum State {Off, Initialized, HeatingOn, HeatingOff, DumpResults};
 enum State _state;
@@ -46,6 +59,7 @@ enum State _state;
 char *strStates[5] = {"Off", "Initialized", "HeatingOn", "HeatingOff" ,"DumpResults"};
 
 bool heaters[NUMRELAYS];
+float temperatures[NUMSENSORS];
 
 class Result{
   public:
@@ -55,9 +69,11 @@ class Result{
     float avgtemp;
     bool relays[NUMRELAYS];
     State state;
+    unsigned int workingSensors;
 };
 
 Result results[MAXLOGS];
+Result lastResult;
 
 void printAlarm(const char* c){
    M5.Lcd.clear(RED);
@@ -65,6 +81,7 @@ void printAlarm(const char* c){
    M5.Lcd.setTextSize(2);
    M5.Lcd.setCursor(0, 0);
    M5.Lcd.println(c);
+   delay(1000);
 }
 void printMessage(const char* c){
   M5.Lcd.clear(BLACK);
@@ -129,7 +146,7 @@ bool setStateFromTo(State f, State t){
   }
 }
 
-
+#include "Temperature.h"
 
 bool initialize(){
 // init lcd, serial, sd
@@ -187,6 +204,10 @@ void printResult(Result r){
    sprintf(temp, "%3.1f", r.avgtemp);
    M5.Lcd.print("Avg.Temp(C): ");
    M5.Lcd.println(temp);
+   M5.Lcd.print("N. sens.: ");
+   M5.Lcd.print(r.workingSensors);
+   M5.Lcd.print("/");
+   M5.Lcd.println(NUMSENSORS);
    M5.Lcd.print("Heaters: ");
    for (int i=0; i< NUMRELAYS; ++i){
     if (r.relays[i] == true){
@@ -223,7 +244,7 @@ void printResult(Result r){
   M5.Lcd.println(buffer);
   M5.Lcd.println();
   M5.Lcd.println("A:Off   B:Hon   C:Hoff");
-
+  Serial.println("printResult updated");
 }
 
 void loopsetup() {
@@ -232,6 +253,7 @@ void loopsetup() {
   // we are starting up
 
   startsessiontime = timeClient.getEpochTime();
+  lastupdatetime = startsessiontime;
   if (getState() != Off){
     setState(Off);
   }
@@ -299,6 +321,10 @@ void setup() {
     while (1);
   }
   Serial.println("initialization done.");
+
+  Serial.print("Initializing temperature sensors...");
+  setupTemperature();
+  Serial.println(" initialization done.");
 }
 
 Result getResult(){
@@ -307,17 +333,30 @@ Result getResult(){
   r.timestamp = tstamp;
   r.timestate = tstamp-offset;
   r.state = getState();
-  r.avgtemp = readAvgTemp();
+  updateTemperatures(temperatures);
   for (int i=0; i< NUMRELAYS; ++i){
    r.relays[i] = heaters[i];
   }
+  r.workingSensors = 0;
+  for (int i=0; i< NUMSENSORS; ++i){
+   float temp = temperatures[i];
+   r.sensorReadings[i] = temperatures[i];
+   if(temp!=85.&&temp!=-127.&&temp!=-0.5){
+    r.workingSensors += 1;
+   }
+   else{
+    temp=0;
+  }
+  }
+  r.avgtemp = 0.;
+  for (int i=0; i< NUMSENSORS; ++i){
+   r.avgtemp+=temperatures[i];
+  }
+  r.avgtemp/=r.workingSensors;
+  lastResult = r;
   return r;
 }
 
-float readAvgTemp(){
-//fixme
-return 14.;
-}
 
 bool reallyGoToHeatingOn(){
      bool res2 = setRelaysToOn();
@@ -424,10 +463,14 @@ void loop() {
   delay(0);
   Result r= getResult();
 
-  if (loopNO % 5000 == 0){
+  timeClient.getEpochTime()-lastupdatetime;
+  unsigned int startsessiontime;
+
+  // update each ...
+  const int updateTime = 2; // ...seconds
+  if (timeClient.getEpochTime()-lastupdatetime>updateTime){
+    lastupdatetime = timeClient.getEpochTime();
     printResult(r);
-  }
-if (loopNO % 50000 == 0){
     storeResult(r);
   }
 
@@ -712,4 +755,8 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels){
         }
         file = root.openNextFile();
     }
+}
+
+float readAvgTemp(){
+  return lastResult.avgtemp;
 }

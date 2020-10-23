@@ -9,6 +9,15 @@
 
 WebServer server(80);
 
+//// RELAY ////
+const uint8_t relayChannels[]={
+  2,
+//  3
+};
+const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
+
+//// SENSORS ////
+
 #define  SENSADDRLENGHT 8
 const uint8_t sensorAddressList[][SENSADDRLENGHT]={
   {0x28, 0x48, 0x96, 0x30, 0x09, 0x00, 0x00, 0x27}, // sensors #1
@@ -18,7 +27,9 @@ const uint8_t sensorAddressList[][SENSADDRLENGHT]={
 //  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // sensors #5
   };
 const size_t NUMSENSORS = sizeof(sensorAddressList)/sizeof(sensorAddressList[0]);
-#define NUMRELAYS 2
+
+////////////////////
+
 #define TEMPINIMIN 12
 #define TEMPINIMAX 25
 #define MAXTEMPON 55
@@ -99,37 +110,6 @@ bool setState(State s){
   return true;
 }
 
-bool setRelayToOn(int i){
-  // FIXME
-  heaters[i]=true;
-  return true;
-}
-bool setRelayToOff(int i){
-  // FIXME
-  heaters[i]=false;
-  return true;
-}
-
-bool setRelaysToOn(){
-    for (int i=0; i< NUMRELAYS; ++i){
-      if (setRelayToOn(i) == false){
-        printAlarm("Cannot operate on Relay "+(i+'0'));
-        Serial.println("Cannot operate on Relay "+(i+'0'));
-        return false;
-      }
-    }
-    return true;
-}
-bool setRelaysToOff(){
-    for (int i=0; i< NUMRELAYS; ++i){
-      if (setRelayToOff(i) == false){
-        printAlarm("Cannot operate on Relay "+(i+'0'));
-        return false;
-      }
-    }
-    return true;
-}
-
 State getState(){
   return _state;
 }
@@ -147,6 +127,7 @@ bool setStateFromTo(State f, State t){
 }
 
 #include "Temperature.h"
+#include "Relay.h"
 
 bool initialize(){
 // init lcd, serial, sd
@@ -324,6 +305,9 @@ void setup() {
 
   Serial.print("Initializing temperature sensors...");
   setupTemperature();
+  Serial.println(" initialization done.");
+  Serial.print("Initializing relays...");
+  setupRelay();
   Serial.println(" initialization done.");
 }
 

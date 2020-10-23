@@ -11,8 +11,9 @@ WebServer server(80);
 
 //// RELAY ////
 const uint8_t relayChannels[]={
-  2,
-//  3
+  //GROVE A corresponds to GPIO-21 and GPIO-22 in the (https://github.com/m5stack/M5Stack)
+  21,
+  22,
 };
 const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 
@@ -30,8 +31,8 @@ const size_t NUMSENSORS = sizeof(sensorAddressList)/sizeof(sensorAddressList[0])
 
 ////////////////////
 
-#define TEMPINIMIN 12
-#define TEMPINIMAX 25
+#define TEMPINIMIN -1000
+#define TEMPINIMAX 1000
 #define MAXTEMPON 55
 #define MAXOPTIME 10000
 #define MAXHEATINGON 10
@@ -322,19 +323,17 @@ Result getResult(){
    r.relays[i] = heaters[i];
   }
   r.workingSensors = 0;
-  for (int i=0; i< NUMSENSORS; ++i){
-   float temp = temperatures[i];
-   r.sensorReadings[i] = temperatures[i];
-   if(temp!=85.&&temp!=-127.&&temp!=-0.5){
-    r.workingSensors += 1;
-   }
-   else{
-    temp=0;
-  }
-  }
   r.avgtemp = 0.;
   for (int i=0; i< NUMSENSORS; ++i){
-   r.avgtemp+=temperatures[i];
+   float temp = temperatures[i];
+   r.sensorReadings[i] = temp;
+   if(temp!=85.&&temp!=-127.&&temp!=-0.5){
+    r.workingSensors += 1;
+    r.avgtemp+=temp;
+   }
+   else{
+//    temp=-127.; //set error value
+  }
   }
   r.avgtemp/=r.workingSensors;
   lastResult = r;
@@ -450,7 +449,7 @@ void loop() {
   timeClient.getEpochTime()-lastupdatetime;
   unsigned int startsessiontime;
 
-  // update each ...
+  // update every ...
   const int updateTime = 2; // ...seconds
   if (timeClient.getEpochTime()-lastupdatetime>updateTime){
     lastupdatetime = timeClient.getEpochTime();

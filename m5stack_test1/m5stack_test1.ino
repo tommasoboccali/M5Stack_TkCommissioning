@@ -12,8 +12,9 @@ WebServer server(80);
 //// RELAY ////
 const uint8_t relayChannels[]={
   //GROVE A corresponds to GPIO-21 and GPIO-22 in the (https://github.com/m5stack/M5Stack)
-  21,
   22,
+//  21, // does not work, using jumper 21 <----> 2   
+  2,
 };
 const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 

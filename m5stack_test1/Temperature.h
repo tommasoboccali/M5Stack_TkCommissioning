@@ -2,11 +2,8 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-// Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS 5
-
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
-OneWire oneWire(ONE_WIRE_BUS);
+OneWire oneWire(TEMP_SENSORS_CHANNEL);
 
 
 //uint8_t addr[SENSADDRLENGHT] = {0};
@@ -59,8 +56,8 @@ void printAddress(const uint8_t deviceAddress[]){
 void updateTemperatures(float temperatures[NUMSENSORS]){
   for(size_t i=0; i<NUMSENSORS; i++){
     temperatures[i] = readTemp(sensorAddressList[i]);
-    Serial.println(temperatures[i]);
     printAddress(sensorAddressList[i]);
+    Serial.println(temperatures[i]);
   }
 }
 

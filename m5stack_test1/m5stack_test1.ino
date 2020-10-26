@@ -11,14 +11,18 @@ WebServer server(80);
 
 //// RELAY ////
 const uint8_t relayChannels[]={
-  //GROVE A corresponds to GPIO-21 and GPIO-22 in the (https://github.com/m5stack/M5Stack), 
-  //GPIO-21 does not work, so use a jumper 22 <---> 2
-  22, // relay-1
-  2,  // relay-2
+  //GROVE Port A corresponds to GPIO-22 and GPIO-21 https://docs.m5stack.com/#/en/core/m5go?id=pinmap
+  //GROVE Port C corresponds to GPIO-22 and GPIO-21 https://docs.m5stack.com/#/en/core/m5go?id=pinmap
+  22,  // pin-1 gate-A 
+  21,  // pin-2 gate-A 
+  16,  // pin-1 gate-C 
+  17,  // pin-2 gate-C 
 };
 const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 
 //// SENSORS ////
+  //GROVE Port B corresponds to GPIO-36 and GPIO-26 https://docs.m5stack.com/#/en/core/m5go?id=pinmap
+#define TEMP_SENSORS_CHANNEL 26 // pin-1 gate-B 
 
 #define  SENSADDRLENGHT 8
 const uint8_t sensorAddressList[][SENSADDRLENGHT]={
@@ -52,10 +56,10 @@ unsigned int loopNO;
 #include <WiFiUdp.h>
 
 // Replace with your network credentials
-//const char* ssid     = "tbtc";
-//const char* password = "pippo345";
-const char* ssid     = "InfostradaWiFi-D-2GHz";
-const char* password = "InternetCasaDonat0$";
+const char* ssid     = "tbtc";
+const char* password = "pippo345";
+//const char* ssid     = "InfostradaWiFi-D-2GHz";
+//const char* password = "InternetCasaDonat0$";
 
 const  char* filename_prefix = "tklog_";
 char file_name[30];
@@ -63,8 +67,8 @@ char file_name[30];
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
 
-//NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
-NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
+NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
+//NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
 enum State {Off, Initialized, HeatingOn, HeatingOff, DumpResults};
 enum State _state;

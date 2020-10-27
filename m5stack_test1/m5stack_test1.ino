@@ -22,7 +22,7 @@ const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 
 //// SENSORS ////
   //GROVE Port B corresponds to GPIO-36 and GPIO-26 https://docs.m5stack.com/#/en/core/m5go?id=pinmap
-#define TEMP_SENSORS_CHANNEL 26 // pin-1 gate-B 
+#define TEMP_SENSORS_CHANNEL 26 // pin-1 gate-B g
 
 #define  SENSADDRLENGHT 8
 const uint8_t sensorAddressList[][SENSADDRLENGHT]={
@@ -450,7 +450,7 @@ void loop() {
     loopsetup();
   }
   delay(0);
-  Result r= getResult();
+  Result r;
 
   timeClient.getEpochTime()-lastupdatetime;
   unsigned int startsessiontime;
@@ -459,6 +459,7 @@ void loop() {
   const int updateTime = 1; // ...seconds
   if (timeClient.getEpochTime()-lastupdatetime>updateTime){
     lastupdatetime = timeClient.getEpochTime();
+    r =  getResult();
     printResult(r);
     storeResult(r);
   }

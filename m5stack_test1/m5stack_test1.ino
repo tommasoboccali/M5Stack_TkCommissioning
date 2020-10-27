@@ -38,10 +38,10 @@ const size_t NUMSENSORS = sizeof(sensorAddressList)/sizeof(sensorAddressList[0])
 
 #define TEMPINIMIN -1000
 #define TEMPINIMAX 1000
-#define MAXTEMPON 55
+#define MAXTEMPON 90
 #define MAXOPTIME 10000
-#define MAXHEATINGON 10
-#define MINHEATINGOFF 12
+#define MAXHEATINGON 1000
+#define MINHEATINGOFF 100
 #define MAXLOGS 10
 
 
@@ -70,10 +70,10 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
 //NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
-enum State {Off, Initialized, HeatingOn, HeatingOff, DumpResults};
+enum State {Off, Initialized, Ready,HeatingOn, HeatingOff, DumpResults};
 enum State _state;
 
-char *strStates[5] = {"Off", "Initialized", "HeatingOn", "HeatingOff" ,"DumpResults"};
+char *strStates[6] = {"Off", "Initialized", "Ready","HeatingOn", "HeatingOff" ,"DumpResults"};
 
 bool heaters[NUMRELAYS];
 float temperatures[NUMSENSORS];
@@ -293,6 +293,7 @@ void setup() {
   timeClient.begin();
   server.on("/",handle_OnConnect);
   server.on("/off",handle_off);
+  server.on("/ready",handle_ready);
 
   server.on("/ls",handle_ls);
   server.on("/dl",handle_dl);
@@ -455,7 +456,7 @@ void loop() {
   unsigned int startsessiontime;
 
   // update every ...
-  const int updateTime = 2; // ...seconds
+  const int updateTime = 1; // ...seconds
   if (timeClient.getEpochTime()-lastupdatetime>updateTime){
     lastupdatetime = timeClient.getEpochTime();
     printResult(r);
@@ -478,12 +479,15 @@ bool res2 = setRelaysToOff();
     M5.Lcd.println("going off");
   }
   if (M5.BtnB.wasPressed()) {
+    if (g == Initialized) {
+       bool res3 = setState(Ready);
+    }
     bool res2 = reallyGoToHeatingOn();
   }
   if (M5.BtnC.wasPressed()) {
     bool res2 = reallyGoToHeatingOff();
   }
-  if (g == Initialized || (g==HeatingOff && (timeClient.getEpochTime()-offset>MINHEATINGOFF))){
+  if (g == Ready || (g==HeatingOff && (timeClient.getEpochTime()-offset>MINHEATINGOFF))){
      bool res2 = goToHeatingOn();
   }
 
@@ -501,8 +505,15 @@ bool res2 = setRelaysToOff();
 }
 
 
+
+
 void handle_off(){
   server.send(200,"text/html",sendOff());
+}
+
+
+void handle_ready(){
+  server.send(200,"text/html",sendReady());
 }
 void handle_OnConnect(){
   server.send(200,"text/html",sendResult(getResult()));
@@ -539,22 +550,36 @@ String sendFile(){
   return ptr;
 }
 
-
-
-String sendOff(){
+String sendReady(){
   String ptr;
-  ptr+="Stopping System...<br>\n";
+  ptr+="Setting System to Ready...<br>\n";
   bool res2 = setRelaysToOff();
   if (res2 == false){
       ptr+="Cannot set relays to off<br>\n";
       return (ptr);
     }
-    bool res3 = setState(Off);
+    bool res3 = setState(Ready);
     if (res3 == false){
-      ptr+="Cannot set state to Off<br>\n";
+      ptr+="Cannot set state to Ready<br>\n";
       return (ptr);
     }
-  ptr+="Now We are off<br>\n";
+    return ptr;
+}
+
+String sendOff(){
+  String ptr;
+  ptr+="Setting System to Initialized...<br>\n";
+  bool res2 = setRelaysToOff();
+  if (res2 == false){
+      ptr+="Cannot set relays to off<br>\n";
+      return (ptr);
+    }
+    bool res3 = setState(Initialized);
+    if (res3 == false){
+      ptr+="Cannot set state to Intialized<br>\n";
+      return (ptr);
+    }
+  ptr+="Now We are Initialized - you can go back and reload<br>\n";
   return ptr;
 }
 String sendRemove(){
@@ -577,6 +602,7 @@ String sendls(){
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
   ptr +="<title>Tk Tests Pisa</title>\n";
+
   ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
   ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
   ptr +=".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
@@ -602,6 +628,8 @@ String sendResult(Result r){
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
   ptr +="<title>Tk Pisa tests</title>\n";
+  ptr+="<meta http-equiv=\"refresh\" content=\"5\" >\n";
+
   ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
   ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
   ptr +=".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
@@ -646,7 +674,8 @@ String sendResult(Result r){
 ptr+="<br><br><br>\n";
 ptr+=" <a href=\"/ls\"> Directory Listing </a> ";
 ptr+="<br><br><br>\n";
-ptr+=" <a href=\"/off\"> <button>Switch all systems to Off</button> </a> ";
+ptr+=" <a href=\"/off\"> <button>Set System to Initialize (will not start sequence)</button> </a><br><br><br>\n ";
+ptr+=" <a href=\"/ready\"> <button>Set System to Ready and Start Automatic Sequence</button> </a> ";
 
 
   ptr +="</body>\n";

@@ -14,8 +14,8 @@ WebServer server(80);
 //// RELAY ////
 const uint8_t relayChannels[]={
   //GROVE Port A corresponds to GPIO-22 and GPIO-21 https://docs.m5stack.com/#/en/core/m5go?id=pinmap
-  22,  // pin-1 gate-A 
-//  21,  // pin-2 gate-A 
+  22,  // pin-1 gate-A
+//  21,  // pin-2 gate-A
 };
 const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 
@@ -155,7 +155,7 @@ bool initialize(){
   }
   M5.Power.begin();
 
-  printMessage("Btn A for 1 sec to start");
+  printMessage("Btn A for 1 sec to start; Btn B (now!) for OTA");
   M5.Lcd.setCursor(3, 35);
   M5.Lcd.setTextColor(RED);
   bool initialized=false;
@@ -297,14 +297,14 @@ void setup() {
     Serial.print(".");
     retry--;
     if(retry==0) break;
-    
+
   }
   if(retry==0) WiFi.softAP("M5");
   else {
     timeClient.begin();
   }
 
-  
+
   // Port defaults to 3232
   // ArduinoOTA.setPort(3232);
 
@@ -351,7 +351,7 @@ if(retry==0) while(true)   ArduinoOTA.handle();
   Serial.println("Ready");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  
+
   // Print local IP address and start web server
   Serial.println("");
   Serial.println("WiFi connected.");
@@ -359,7 +359,7 @@ if(retry==0) while(true)   ArduinoOTA.handle();
   Serial.println(WiFi.localIP());
   Serial.println(WiFi.softAPIP());
   // Initialize a NTPClient to get time
-  
+
   server.on("/",handle_OnConnect);
   server.on("/off",handle_off);
   server.on("/ready",handle_ready);
@@ -386,7 +386,7 @@ if(retry==0) while(true)   ArduinoOTA.handle();
   setupRelay();
   Serial.println(" initialization done.");
 
- 
+
 
 }
 
@@ -542,7 +542,7 @@ void loop() {
 
 
 M5.update();
-  
+
   if (M5.BtnA.wasPressed()) {
 bool res2 = setRelaysToOff();
     if (res2 == false){

@@ -57,12 +57,12 @@ unsigned int loopNO;
 #include <WiFiUdp.h>
 
 // Replace with your network credentials
-//const char* ssid     = "tbtc";
-//const char* password = "pippo345";
+const char* ssid     = "tbtc";
+const char* password = "pippo345";
 //const char* ssid     = "InfostradaWiFi-D-2GHz";
 //const char* password = "InternetCasaDonat0$";
-const char* ssid     = "MEGA";
-const char* password = "13801879";
+//const char* ssid     = "MEGA";
+//const char* password = "13801879";
 
 const  char* filename_prefix = "tklog_";
 char file_name[30];
@@ -70,8 +70,8 @@ char file_name[30];
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
 
-//NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
-NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
+NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
+//NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
 enum State {Off, Initialized, Ready,HeatingOn, HeatingOff, DumpResults};
 enum State _state;

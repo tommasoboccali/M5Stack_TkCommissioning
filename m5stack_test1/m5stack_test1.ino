@@ -3,7 +3,9 @@
 #include <time.h>
 #include <SD.h>
 #include "FS.h"
-
+#include <ESPmDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 
 #include <WebServer.h>
 
@@ -12,8 +14,8 @@ WebServer server(80);
 //// RELAY ////
 const uint8_t relayChannels[]={
   //GROVE Port A corresponds to GPIO-22 and GPIO-21 https://docs.m5stack.com/#/en/core/m5go?id=pinmap
-  22,  // pin-1 gate-A 
-//  21,  // pin-2 gate-A 
+  22,  // pin-1 gate-A
+//  21,  // pin-2 gate-A
 };
 const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 
@@ -55,10 +57,12 @@ unsigned int loopNO;
 #include <WiFiUdp.h>
 
 // Replace with your network credentials
-const char* ssid     = "tbtc";
-const char* password = "pippo345";
+//const char* ssid     = "tbtc";
+//const char* password = "pippo345";
 //const char* ssid     = "InfostradaWiFi-D-2GHz";
 //const char* password = "InternetCasaDonat0$";
+const char* ssid     = "MEGA";
+const char* password = "13801879";
 
 const  char* filename_prefix = "tklog_";
 char file_name[30];
@@ -66,8 +70,8 @@ char file_name[30];
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
 
-NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
-//NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
+//NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
+NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
 enum State {Off, Initialized, Ready,HeatingOn, HeatingOff, DumpResults};
 enum State _state;
@@ -151,7 +155,7 @@ bool initialize(){
   }
   M5.Power.begin();
 
-  printMessage("Btn A for 1 sec to start");
+  printMessage("Btn A for 1 sec to start; Btn B (now!) for OTA");
   M5.Lcd.setCursor(3, 35);
   M5.Lcd.setTextColor(RED);
   bool initialized=false;
@@ -159,6 +163,14 @@ bool initialize(){
     delay(100);
     M5.update();
     M5.Lcd.print(".");
+    if (M5.BtnB.wasPressed()) {
+        M5.Lcd.println("OTA");
+        while(true){
+            ArduinoOTA.handle();
+
+        }
+
+  }
     if (M5.BtnA.wasPressed()) {
     char buffer[100];
     sprintf(buffer, "IP %s\n", WiFi.localIP().toString().c_str());
@@ -279,17 +291,75 @@ void setup() {
   Serial.println(ssid);
   WiFi.begin(ssid, password);
 
+  int retry=10;
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    retry--;
+    if(retry==0) break;
+
   }
+  if(retry==0) WiFi.softAP("M5");
+  else {
+    timeClient.begin();
+  }
+
+
+  // Port defaults to 3232
+  // ArduinoOTA.setPort(3232);
+
+  // Hostname defaults to esp3232-[MAC]
+   ArduinoOTA.setHostname("M5cms");
+
+  // No authentication by default
+  // ArduinoOTA.setPassword("admin");
+
+  // Password can be set with it's md5 value as well
+  // MD5(admin) = 21232f297a57a5a743894a0e4a801fc3
+  // ArduinoOTA.setPasswordHash("21232f297a57a5a743894a0e4a801fc3");
+
+  ArduinoOTA
+    .onStart([]() {
+      String type;
+      if (ArduinoOTA.getCommand() == U_FLASH)
+        type = "sketch";
+      else // U_SPIFFS
+        type = "filesystem";
+
+      // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+      Serial.println("Start updating " + type);
+    })
+    .onEnd([]() {
+      Serial.println("\nEnd");
+    })
+    .onProgress([](unsigned int progress, unsigned int total) {
+      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+    })
+    .onError([](ota_error_t error) {
+      Serial.printf("Error[%u]: ", error);
+      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    });
+
+  ArduinoOTA.begin();
+//doesn't work without internet, so we just wait for OTA
+if(retry==0) while(true)   ArduinoOTA.handle();
+
+  Serial.println("Ready");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
   // Print local IP address and start web server
   Serial.println("");
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  Serial.println(WiFi.softAPIP());
   // Initialize a NTPClient to get time
-  timeClient.begin();
+
   server.on("/",handle_OnConnect);
   server.on("/off",handle_off);
   server.on("/ready",handle_ready);
@@ -315,6 +385,9 @@ void setup() {
   Serial.print("Initializing relays...");
   setupRelay();
   Serial.println(" initialization done.");
+
+
+
 }
 
 Result getResult(){
@@ -416,10 +489,14 @@ bool storeResult(Result r){
 
 
 void loop() {
+  ArduinoOTA.handle();
+
   delay(00);
   server.handleClient();
   while(!timeClient.update()) {
     timeClient.forceUpdate();
+      ArduinoOTA.handle();
+
   }
     loopNO=loopNO+1;
     if (loopNO%5000 == 0){
@@ -462,6 +539,7 @@ void loop() {
 
 
   M5.update();
+
   if (M5.BtnA.wasPressed()) {
 bool res2 = setRelaysToOff();
     if (res2 == false){

@@ -20,16 +20,17 @@ void setAddress(byte addr[], OneWire& oneWire){
   return;
 }
 
-float readTemp(const byte addr[SENSADDRLENGHT]){
-  byte data[12];
-
+void prepareReadTemp(const byte addr[SENSADDRLENGHT]){
   oneWire.reset_search();  
   oneWire.reset();
   oneWire.select(addr);
-  oneWire.write(0x44, 1);        // start conversion, with parasite power on at the end
+  oneWire.write(0x44, 1);        // start conversion, with parasite power on at the end  
+  return;
+}
 
-  delay(750);     // maybe 750ms is enough, maybe not
-  
+float readTemp(const byte addr[SENSADDRLENGHT]){
+  byte data[12];
+
   oneWire.reset();
   oneWire.select(addr);    
   oneWire.write(0xBE);         // Read Scratchpad
@@ -53,11 +54,24 @@ void printAddress(const uint8_t deviceAddress[]){
   }
 }
 
+
+void delayBadSensor(const byte addr[SENSADDRLENGHT]){
+    if(addr[7] == byte(0x27)) {
+      Serial.println(" Delay");    
+      delay(100);
+    }    
+}
+
 void updateTemperatures(float temperatures[NUMSENSORS]){
   for(size_t i=0; i<NUMSENSORS; i++){
+    prepareReadTemp(sensorAddressList[i]);
+//    delayBadSensor(sensorAddressList[i]);
+  }  
+  delay(250);     // maybe 750ms is enough, maybe not
+  for(size_t i=0; i<NUMSENSORS; i++){
     temperatures[i] = readTemp(sensorAddressList[i]);
-    printAddress(sensorAddressList[i]);
-    Serial.println(temperatures[i]);
+//    printAddress(sensorAddressList[i]);
+//    Serial.println(temperatures[i]);
   }
 }
 
@@ -79,10 +93,10 @@ void setupTemperature(void){
   sensors.begin();
   uint8_t sensorFoundAddress[SENSADDRLENGHT];
   uint8_t nSensors = sensors.getDeviceCount();
+  Serial.println("Found sensors with address: ");
   for(size_t i=0; i<nSensors; i++){
       sensors.getAddress(sensorFoundAddress, i);
       Serial.println("");
-      Serial.print("Found sensors with address ");
       printAddress(sensorFoundAddress);
       Serial.println("");
       if(!isInSensorAddressList(sensorFoundAddress)){

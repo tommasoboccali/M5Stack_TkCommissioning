@@ -24,12 +24,12 @@ const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 const uint8_t sensorAddressList[][SENSADDRLENGHT]={
   {0x28, 0x62, 0x37, 0x30, 0x09, 0x00, 0x00, 0xA0}, // sensor #1
   {0x28, 0xF7, 0x87, 0x30, 0x09, 0x00, 0x00, 0xB5}, // sensor #2
-  {0x28, 0x48, 0x96, 0x30, 0x09, 0x00, 0x00, 0x27}, // sensor #3
-  {0x28, 0xE4, 0x50, 0x30, 0x09, 0x00, 0x00, 0xB8}, // sensor #4
-  {0x28, 0xEA, 0x1F, 0x31, 0x09, 0x00, 0x00, 0xA2}, // sensor #5
-  {0x28, 0x71, 0xDC, 0x30, 0x09, 0x00, 0x00, 0x08}, // sensor #6
-  {0x28, 0x7D, 0xFC, 0x30, 0x09, 0x00, 0x00, 0x8D}, // sensor #7
-  {0x28, 0x13, 0x06, 0x30, 0x09, 0x00, 0x00, 0x46}, // sensor #8
+  {0x28, 0xE4, 0x50, 0x30, 0x09, 0x00, 0x00, 0xB8}, // sensor #3
+  {0x28, 0xEA, 0x1F, 0x31, 0x09, 0x00, 0x00, 0xA2}, // sensor #4
+  {0x28, 0x71, 0xDC, 0x30, 0x09, 0x00, 0x00, 0x08}, // sensor #5
+  {0x28, 0x7D, 0xFC, 0x30, 0x09, 0x00, 0x00, 0x8D}, // sensor #6
+  {0x28, 0x13, 0x06, 0x30, 0x09, 0x00, 0x00, 0x46}, // sensor #7
+  {0x28, 0x48, 0x96, 0x30, 0x09, 0x00, 0x00, 0x27}, // sensor #8
 };
 const size_t NUMSENSORS = sizeof(sensorAddressList)/sizeof(sensorAddressList[0]);
 
@@ -38,7 +38,7 @@ const size_t NUMSENSORS = sizeof(sensorAddressList)/sizeof(sensorAddressList[0])
 #define TEMPINIMIN -1000
 #define TEMPINIMAX 1000
 #define MAXTEMPON 90
-#define MAXOPTIME 10000
+#define MAXOPTIME 1000
 #define MAXHEATINGON 1000
 #define MINHEATINGOFF 100
 #define MAXLOGS 10
@@ -156,7 +156,7 @@ bool initialize(){
   M5.Lcd.setTextColor(RED);
   bool initialized=false;
   while (initialized == false) {
-    delay(2000);
+    delay(100);
     M5.update();
     M5.Lcd.print(".");
     if (M5.BtnA.wasPressed()) {
@@ -430,9 +430,6 @@ void loop() {
   Serial.print ("  TempAvg = ");
   Serial.println(readAvgTemp());
     }
-  // put your setup code here, to run once:
-  M5.begin(true, false, true);
-  M5.update();
 
   if (timeClient.getEpochTime()-startsessiontime > MAXOPTIME){
   }
@@ -456,15 +453,15 @@ void loop() {
 
   // update every ...
   const int updateTime = 1; // ...seconds
-  if (timeClient.getEpochTime()-lastupdatetime>updateTime){
-    lastupdatetime = timeClient.getEpochTime();
+  if (timeClient.getEpochTime()-lastupdatetime>=updateTime){
     r =  getResult();
     printResult(r);
     storeResult(r);
+    lastupdatetime = timeClient.getEpochTime();
   }
 
 
-M5.update();
+  M5.update();
   if (M5.BtnA.wasPressed()) {
 bool res2 = setRelaysToOff();
     if (res2 == false){

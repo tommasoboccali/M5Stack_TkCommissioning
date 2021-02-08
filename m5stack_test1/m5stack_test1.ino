@@ -15,12 +15,14 @@ WebServer server(80);
 const uint8_t relayChannels[]={
   //GROVE Port A corresponds to GPIO-22 and GPIO-21 https://docs.m5stack.com/#/en/core/m5go?id=pinmap
   22,  // pin-1 gate-A
-//  21,  // pin-2 gate-A
+  21,  // pin-2 gate-A
+  16,  // pin-1 gate-C
+  17,  // pin-2 gate-C
 };
 const size_t NUMRELAYS = sizeof(relayChannels)/sizeof(relayChannels[0]);
 
 //// SENSORS ////
-#define TEMP_SENSORS_CHANNEL 5
+#define TEMP_SENSORS_CHANNEL 26 // pin white gate-B
 
 #define  SENSADDRLENGHT 8
 const uint8_t sensorAddressList[][SENSADDRLENGHT]={
@@ -39,10 +41,10 @@ const size_t NUMSENSORS = sizeof(sensorAddressList)/sizeof(sensorAddressList[0])
 
 #define TEMPINIMIN -1000
 #define TEMPINIMAX 1000
-#define MAXTEMPON 90
-#define MAXOPTIME 1000
-#define MAXHEATINGON 1000
-#define MINHEATINGOFF 100
+#define MAXTEMPON 9000000
+#define MAXOPTIME 100000000
+#define MAXHEATINGON 100000000
+#define MINHEATINGOFF 100000000
 #define MAXLOGS 10
 
 
@@ -57,7 +59,9 @@ unsigned int loopNO;
 #include <WiFiUdp.h>
 
 // Replace with your network credentials
-const char* ssid     = "tbtc";
+//const char* ssid     = "tbtc";
+//const char* password = "pippo345";
+const char* ssid     = "tombocap";
 const char* password = "pippo345";
 //const char* ssid     = "InfostradaWiFi-D-2GHz";
 //const char* password = "InternetCasaDonat0$";
@@ -70,8 +74,8 @@ char file_name[30];
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
 
-NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
-//NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
+//NTPClient timeClient(ntpUDP,"time1.pi.infn.it");
+NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
 enum State {Off, Initialized, Ready,HeatingOn, HeatingOff, DumpResults};
 enum State _state;

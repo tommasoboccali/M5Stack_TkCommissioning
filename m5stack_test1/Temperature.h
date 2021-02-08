@@ -40,10 +40,15 @@ float readTemp(const byte addr[SENSADDRLENGHT]){
   }
 
   int16_t raw = (data[1] << 8) | data[0];
-  raw = raw & ~7;  // 9 bit resolution, 93.75 ms
+  byte cfg = (data[4] & 0x60);
+  // at lower res, the low bits are undefined, so let's zero them
+  if (cfg == 0x00) raw = raw & ~7;                  // 9 bit resolution, 93.75 ms
+  else if (cfg == 0x20) raw = raw & ~3;             // 10 bit res, 187.5 ms
+  else if (cfg == 0x40) raw = raw & ~1;             // 11 bit res, 375 ms
+  // default is 12 bit resolution, 750 ms conversion time
+    
   return (float)raw / 16.0;
 }
-
 
 void printAddress(const uint8_t deviceAddress[]){
   for (uint8_t i = 0; i < SENSADDRLENGHT; i++)
@@ -67,7 +72,7 @@ void updateTemperatures(float temperatures[NUMSENSORS]){
     prepareReadTemp(sensorAddressList[i]);
 //    delayBadSensor(sensorAddressList[i]);
   }  
-  delay(250);     // maybe 750ms is enough, maybe not
+  delay(750);     // maybe 750ms is enough, maybe not
   for(size_t i=0; i<NUMSENSORS; i++){
     temperatures[i] = readTemp(sensorAddressList[i]);
 //    printAddress(sensorAddressList[i]);
@@ -98,6 +103,8 @@ void setupTemperature(void){
       sensors.getAddress(sensorFoundAddress, i);
       Serial.println("");
       printAddress(sensorFoundAddress);
+      Serial.println("Setting highest resolution");
+      sensors.setResolution(sensorFoundAddress, 12);
       Serial.println("");
       if(!isInSensorAddressList(sensorFoundAddress)){
 //        printAlarm("NEW SENSOR FOUND");

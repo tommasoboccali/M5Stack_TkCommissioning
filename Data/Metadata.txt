@@ -2,7 +2,7 @@ tklog_1612542074.txt:
 sensors
 
 2      0
---------
+-------- --
 3      5
 
 Power Supply: 20V
@@ -14,7 +14,7 @@ tklog_1612545297.txt:
 sensors
 
 2      0
---------
+-------- --
 3      5
 
 Power Supply = 15 V, 0.392 A
@@ -23,3 +23,105 @@ metto peso sopra a T = 1612546445
 
 
 
+TESTS 08 Feb 2021
+
+tklog_1612777420.txt:
+
+2      0
+-------- --
+3      5
+
+V=15V
+A=0.4A
+
+T = 1612777638
+
+V=19 V
+A = 0.5 A
+
+toccalto sensore 5 a T = 1612778093
+
+
+tklog_1612780183.txt:
+
+T = 161278191
+
+VENTOLA ON
+V = 19V
+A = 0.5 A
+
+T = 1612780947
+spento heating accesa ventola
+
+NOTA: scambiate posizioni
+
+0     2
+-------- --
+3      5
+
+
+tklog_1612781179.txt
+
+T = 1612781186
+
+ventola ON, pulita interfaccia
+
+V=19 V
+A = 0.4 A
+
+T = 1612781720
+
+V= 24V
+A=0.58 A
+
+T = 1612781938 metto peso per miglirare contatto termico
+
+
+T = 161278117 (c'e' un errore evidentemente)
+
+metto la piastra fra le due paiastre, senza peso
+
+V = 19V
+A = 0.5 A
+
+
+T = 16123782297
+v=24 V
+A= 0.58A
+
+T = 1612782640
+aggiunto pasta
+V = 19V, A=0.48A
+
+tklog_1612782690.txt
+
+T = 1612783030
+
+V = 24V, A=0.58A
+
+
+tklog_1612783572.txt:
+
+NULLA
+
+
+tklog_1612783710.txt
+
+T = 1612784359
+
+capiamo che ventol era al contrario, la sistemiamo
+messo fogio e tolta pasta
+
+
+T = 1612784422
+
+mettiamo 0V per far raffreddare
+
+T = 16127884528
+V = 19 V A = .48 A
+
+tklog_1612784403.txt:
+
+T = 161278687 (manca una cifra)
+
+V=24V, A=.58 A

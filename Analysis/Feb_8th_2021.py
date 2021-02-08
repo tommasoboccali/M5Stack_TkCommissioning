@@ -38,14 +38,14 @@ ax[0].scatter(my_curated_data[:,0],my_curated_data[:,7], label = 'Sensor 5')
 ax[0].set_ylim([-10,100])
 
 trans = ax[0].get_xaxis_transform()
-delta = .5
+delta =-8
 
 for i in timestamp_moments:
     ax[0].vlines(i,-10,100)
     ax[0].text(i,delta,timestamp_moments[i])
     delta = delta+4
     if (delta>40):
-        delta=0.5
+        delta=-8
 
 ax[0].legend()
 ax[0].grid(True)
@@ -57,14 +57,14 @@ ax[1].grid(True)
 ax[1].set_ylim([-10,10])
 
 trans = ax[1].get_xaxis_transform()
-delta = .5
+delta = -9
 
 for i in timestamp_moments:
     ax[1].vlines(i,-1000,1000)
     ax[1].text(i,delta,timestamp_moments[i])
-    delta = delta+4
-    if (delta>40):
-        delta=0.5
+    delta = delta+2
+    if (delta>9):
+        delta=-9
 
 
 

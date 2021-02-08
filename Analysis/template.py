@@ -9,6 +9,8 @@ delta_T_Above_minus_below = (my_curated_data[:,4]+my_curated_data[:,2])-(my_cura
 #sensors
 # 0,1,2,3,4,5,6,7
 # 2,3,4,5,6,7,8,9
+
+#typically ABOVE are sensors 0,2; below sensors 3,5
 fig, ax = plt.subplots(2)
 
 #sensors

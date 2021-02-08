@@ -1,0 +1,25 @@
+tklog_1612542074.txt:
+sensors
+
+2      0
+--------
+3      5
+
+Power Supply: 20V
+andati a 10 V a T = ? e a 0V a T = 1612544582
+
+
+tklog_1612545297.txt:
+
+sensors
+
+2      0
+--------
+3      5
+
+Power Supply = 15 V, 0.392 A
+
+metto peso sopra a T = 1612546445
+
+
+

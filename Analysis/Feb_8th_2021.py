@@ -29,8 +29,7 @@ timestamp_moments= {    1612777420: "15V, 0.4A",
 
 #typically ABOVE are sensors 0,2; below sensors 3,5
     
-delta_T_Above_minus_below = (my_curated_data[:,4]+my_curated_data[:,2])-(my_curated_data[:,7]+my_curated_data[:,5])
-
+delta_T_Above_minus_below = ( (my_curated_data[:,4]+my_curated_data[:,2])-(my_curated_data[:,7]+my_curated_data[:,5]) ) / 2
     
 fig, ax = plt.subplots(2)
 

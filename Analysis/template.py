@@ -4,7 +4,7 @@ my_data = genfromtxt('../Data/Feb_8th_2021.txt', delimiter=' ')
 mystates = {"Off":0, "Initialized":1, "Ready":2,"HeatingOn":3, "HeatingOff":4 ,"DumpResults":5}
 my_curated_data = my_data[:,[0,4,8,9,10,11,12,13,14,15]]
 
-delta_T_Above_minus_below = (my_curated_data[:,4]+my_curated_data[:,2])-(my_curated_data[:,7]+my_curated_data[:,5])
+delta_T_Above_minus_below = ( (my_curated_data[:,4]+my_curated_data[:,2])-(my_curated_data[:,7]+my_curated_data[:,5]) ) / 2
 
 timestamp_moments= {    1612777420: "15V, 0.4A",
                         1612778093:"touched sensor 5",

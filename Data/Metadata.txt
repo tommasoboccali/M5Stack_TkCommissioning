@@ -125,3 +125,46 @@ tklog_1612784403.txt:
 T = 161278687 (manca una cifra)
 
 V=24V, A=.58 A
+
+
+FEB 9th 2021
+
+setup con basetta resistiva dia lluminio e sopra basetta di carbonio
+con perno cerntrale
+ventola on
+
+
+6                    1
+
+ ----/\------  
+
+ ------------ -- 
+3                     5
+
+tklog_1612884983.txt: 
+
+T = 1612885161
+V=19V, A=0.48A
+
+
+T = 1612885732
+
+V=24V A = 0.59 A
+
+T = 1612886020 Tutto OFF, si e' cambiata basetta di carbonio con SENZA
+/\
+
+T = 1612886153
+
+torno a heating on
+
+V=19V A=0.477A
+
+T = 1612886591
+
+V=24V A= 0.59A
+
+T = 1612887293
+
+heating off
+

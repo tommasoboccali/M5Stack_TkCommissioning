@@ -168,3 +168,70 @@ T = 1612887293
 
 heating off
 
+
+
+FEB 18th 2021
+
+prendo 2 basette di alluminio e ci metto in mezzo il foglio, cercando
+di togliere le bolle con le mani
+poi metto nel forno e comincio a scaldare SENZA fare vuoto
+14:10 - 50C vicino al modulo, 65C vicino alla probe --- 70V
+14:12 passo a 50V
+14:15 spego scalfino (0V). 58C e 70C.  ACCENDO POMPA A VUOTO
+14:18 0.1 ATM, 54C e 57C
+14:19 0.04 ATM, 53C 70C. SPENGO POMPA AVUOTO
+14:20 torno a 1 ATM, scaldino sempre off (0V)
+14:21: 1 ATM, 56C 72C
+
+monto ensori di temperatura su basette
+
+6                    1
+
+ ------------  
+
+ ------------ -- 
+3                     5
+
+ventola ON laterale
+
+tklog_1613655383.txt
+Ts = 1613655383
+
+V=19V, A=0.49A     arrivo a 45C
+
+TS = 1613655903
+
+V=24V, A=0.58A
+
+TS = 1613656097 pigio sensore 1
+TS = 1613656124 ripigio sensore 1
+
+TS = 1613656252 spengo tutto
+
+TS = 1613656921 metto ventola sopra che sputa direttamente e
+perpendicolarmente sulla basetta
+
+V=19V
+
+TS = 1613657085 spengo tutto
+
+NOTA: rimuovo a mane letture a TS =20xxxxxxxx chiaramente un errore
+
+
+--- cuocio seconda coppia di basette, questa volta senz vuoto (MAI
+
+15:19 forno chiuso, 70C, T ~ 23, P=1atm
+15:27 55C 61C 55V
+15:28 60C
+spengo rislaldatoe
+15:30 61C stabile
+1534 55C
+
+
+
+
+
+
+
+
+

@@ -490,6 +490,7 @@ void setup() {
   server.on("/", handle_OnConnect);
   server.on("/off", handle_off);
   server.on("/ready", handle_ready);
+  server.on("/newfile", handle_newfile);
 
   server.on("/ls", handle_ls);
   server.on("/dl", handle_dl);
@@ -533,7 +534,7 @@ Result getResult() {
   for (int i = 0; i < NUMSENSORS; ++i) {
     float temp = temperatures[i];
     r.sensorReadings[i] = temp;
-    if (temp != 85. && temp != -127. && temp != -0.5) {
+    if (temp != 85. && temp != -127. && temp != -0.5 && temp != 0.0) {
       r.workingSensors += 1;
       r.avgtemp += temp;
     }
@@ -719,6 +720,9 @@ void handle_off() {
 }
 
 
+void handle_newfile() {
+  server.send(200, "text/html", sendNewFile());
+}
 void handle_ready() {
   server.send(200, "text/html", sendReady());
 }
@@ -754,6 +758,23 @@ String sendFile() {
     file.close();
 
   }
+  return ptr;
+}
+
+String sendNewFile() {
+  String ptr;
+  ptr += "I'm creating a new file... (to be implemented)<br>\n";
+//  ptr += "Setting System to Ready...<br>\n";
+//  bool res2 = setRelaysToOff();
+//  if (res2 == false) {
+//    ptr += "Cannot set relays to off<br>\n";
+//    return (ptr);
+//  }
+//  bool res3 = setState(Ready);
+//  if (res3 == false) {
+//    ptr += "Cannot set state to Ready<br>\n";
+//    return (ptr);
+//  }
   return ptr;
 }
 
@@ -882,7 +903,8 @@ String sendResult(Result r) {
   ptr += " <a href=\"/ls\"> Directory Listing </a> ";
   ptr += "<br><br><br>\n";
   ptr += " <a href=\"/off\"> <button>Set System to Initialize (will not start sequence)</button> </a><br><br><br>\n ";
-  ptr += " <a href=\"/ready\"> <button>Set System to Ready and Start Automatic Sequence</button> </a> ";
+  ptr += " <a href=\"/ready\"> <button>Set System to Ready and Start Automatic Sequence</button> </a><br><br><br>\n ";
+  ptr += " <a href=\"/newfile\"> <button>New file test</button> </a><br><br><br>\n ";
 
 
   ptr += "</body>\n";

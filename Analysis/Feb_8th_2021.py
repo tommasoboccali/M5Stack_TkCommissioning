@@ -69,6 +69,7 @@ for i in timestamp_moments:
     if (delta>9):
         delta=-9
 
+plt.savefig("Feb_8th_2021.png")
 
 
 plt.show()

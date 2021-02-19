@@ -212,7 +212,7 @@ bool getTimeClientStatus(const char* NTPClientSite) {
 void printResult(Result r) {
   M5.Lcd.clear(BLACK);
   M5.Lcd.setTextColor(YELLOW);
-  M5.Lcd.setTextSize(3);
+  M5.Lcd.setTextSize(2);
   M5.Lcd.setCursor(0, 0);
   M5.Lcd.print ("State ");
   M5.Lcd.println(strStates[getState()]);
@@ -244,6 +244,22 @@ void printResult(Result r) {
   M5.Lcd.println(temp);
   //Serial.print("HEATERS ");
   //Serial.println(temp);
+  int columns=0;
+  M5.Lcd.println("Temperatures: ");
+  for (int i = 0; i < NUMSENSORS; ++i) {
+    M5.Lcd.print(i);
+    M5.Lcd.print(":");
+    M5.Lcd.print(r.sensorReadings[i]);
+    columns++;
+    if(columns>=2){
+      columns=0;
+     M5.Lcd.println("");
+      }
+    else{
+     M5.Lcd.print("    ");
+      }
+  }
+  temp[NUMRELAYS] = '\0';
 
   M5.Lcd.setTextColor(BLUE);
   M5.Lcd.setTextSize(2);
@@ -265,7 +281,7 @@ void printResult(Result r) {
   Serial.print(":");
   Serial.println(mac[0], HEX);
   M5.Lcd.println(buffer);
-  M5.Lcd.println();
+//  M5.Lcd.println();
   M5.Lcd.println("A:Off   B:Hon   C:Hoff");
   Serial.println("printResult updated");
 }

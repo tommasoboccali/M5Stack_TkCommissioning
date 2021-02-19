@@ -23,6 +23,7 @@ bool setRelaysToOn(){
         Serial.println("Cannot operate on Relay "+(i+'0'));
         return false;
       }
+      heaters[i]=true;
     }
     return true;
 }
@@ -32,6 +33,7 @@ bool setRelaysToOff(){
         printAlarm("Cannot operate on Relay "+(i+'0'));
         return false;
       }
+      heaters[i]=false;
     }
     return true;
 }

@@ -229,6 +229,76 @@ spengo rislaldatoe
 
 
 
+FEB 19th 2021
+
+ricuocio l'ultimo di ieri, sempre senza vuoto
+
+15:09 V=70V T>50C
+15:11 V=60V T>58C
+15:13 V=20V T>62C
+15:15 V=40V T>62C
+15:17 V=0V T = 61C
+15:20 V=0V T = 58C SPENGO TUTTO
+
+TS = 1613748629
+
+tklog_1613744620.txt
+
+0                    4
+
+ ------------  
+
+ ------------ -- 
+2                     7
+
+ventola laterale on
+
+V= 19V A =0.49A
+
+TS = 1613748994 mi accorgo che sensore 0 si e' staccato, e cerco di
+risolvere
+
+TS = 1613749034 sensore 0 risolto
+
+TS = 1613749122 V=24V A=0.59A
+
+
+TS = 1613749297  sensore 0 ancora problemi, spengo tutto
+
+TS = 1613749637 V = 0V sensore0 ancora problemi?
+
+TS = 1613749637 V=24V A=0.59A
+
+TS = 1613750013 V=24V cambio alimentatore per ventola
+
+TS = 1613750162 V=30V cambio alimentatore per ventolaA = 0.69A
+
+TS = 1613750285 ancora problemi sensore 0
+
+TS = 1613750482 V=24V
+
+TS = 1613750553 messo sensore 4 in mezzo
+
+0        4
+
+ ------------  
+
+ ------------ -- 
+2                     7
+
+con ventola
+
+TS = 1613750818 V=30V A = 0.696 A
+
+TS = 1613751077  tutto spento
+
+
+
+
+
+
+
+
 
 
 

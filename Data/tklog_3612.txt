@@ -1,0 +1,10 @@
+3612 State Initialized timeState 0 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3616 State Initialized timeState 4 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3620 State Initialized timeState 8 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3625 State Initialized timeState 13 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3629 State Initialized timeState 17 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3633 State Initialized timeState 21 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3639 State Initialized timeState 27 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3643 State Initialized timeState 31 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3647 State Initialized timeState 35 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+3679 State Initialized timeState 67 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 

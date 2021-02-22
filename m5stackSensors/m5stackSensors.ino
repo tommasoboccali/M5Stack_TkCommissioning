@@ -108,7 +108,6 @@ class Result {
 Result results[MAXLOGS];
 Result lastResult;
 
-/*
 int sens_up_1 = -1;
 int sens_up_2 = -1;
 int sens_up_3 = -1;
@@ -117,7 +116,6 @@ int sens_down_1 = -1;
 int sens_down_2 = -1;
 int sens_down_3 = -1;
 int sens_down_4 = -1;
-*/
 
 void updateFileName(){
   unsigned int num = timeClient.getEpochTime();
@@ -532,7 +530,7 @@ void setup() {
   server.on("/ready", handle_ready);
   server.on("/newfile", handle_newfile);
   server.on("/addcomment", handle_addcomment);
-//  server.on("/setupsensors", handle_setupsensors);
+  server.on("/setupsensors", handle_setupsensors);
 
   server.on("/ls", handle_ls);
   server.on("/dl", handle_dl);
@@ -769,11 +767,9 @@ void handle_addcomment() {
   server.send(200, "text/html", sendAddComment());
 }
 
-/*
 void handle_setupsensors() {
   server.send(200, "text/html", sendSetupSensors());
 }
-*/
 
 void handle_ready() {
   server.send(200, "text/html", sendReady());
@@ -817,7 +813,7 @@ String sendFile() {
 String sendAddComment() {
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
-  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =ls\"  />  ";
+  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
   ptr += "</head>\n";
   ptr += "<body>\n";
   ptr += "Adding comment: ";
@@ -838,7 +834,6 @@ String sendAddComment() {
   return ptr;
 }
 
-/*
 String sendSetupSensors() {
   sens_up_1 = atoi(server.arg("sens_up_1").c_str());
   sens_up_2 = atoi(server.arg("sens_up_2").c_str());
@@ -852,7 +847,7 @@ String sendSetupSensors() {
   
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
-//  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
   ptr += "</head>\n";
   ptr += "<body>\n";
   ptr += "Updated sensors map: \n <br>";
@@ -878,7 +873,6 @@ String sendSetupSensors() {
   
   return ptr;
 }
-*/
 
 String sendNewFile() {
   String ptr = "<!DOCTYPE html> <html>\n";
@@ -1050,7 +1044,6 @@ String sendResult(Result r) {
   ptr += " <a href=\"/ready\"> <button>Set System to Ready and Start Automatic Sequence</button> </a><br><br><br>\n ";
   ptr += " <a href=\"/newfile\"> <button>Start a new file</button> </a><br><br><br>\n ";
 
-/*
   ptr += "<br>\n";
   ptr += "<form action=\"/setupsensors\">\n";
   ptr += "<label for=\"sens_up_1\">Sensors top   :</label><br>\n";
@@ -1065,7 +1058,6 @@ String sendResult(Result r) {
   ptr += "<input type=\"text\" id=\"sens_down_4\" name=\"sens_down_4\" value=" + String(sens_down_4) + ">\n";
   ptr += "<br> <input type=\"submit\" value=\"Setup sensors\"> <br>\n";
   ptr += "</form> <br>\n";
-*/
 
   ptr += "</body>\n";
   ptr += "</html>\n";

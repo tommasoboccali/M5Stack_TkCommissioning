@@ -520,6 +520,7 @@ void setup() {
   server.on("/off", handle_off);
   server.on("/ready", handle_ready);
   server.on("/newfile", handle_newfile);
+  server.on("/addcomment", handle_addcomment);
 
   server.on("/ls", handle_ls);
   server.on("/dl", handle_dl);
@@ -752,6 +753,11 @@ void handle_off() {
 void handle_newfile() {
   server.send(200, "text/html", sendNewFile());
 }
+
+void handle_addcomment() {
+  server.send(200, "text/html", sendAddComment()); //printCommentOnFile(file, comment)
+}
+
 void handle_ready() {
   server.send(200, "text/html", sendReady());
 }
@@ -787,6 +793,30 @@ String sendFile() {
     file.close();
 
   }
+  return ptr;
+}
+
+
+String sendAddComment() {
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
+  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =ls\"  />  ";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
+  ptr += "Adding comment: ";
+  String comment = "";
+  if (server.hasArg("comment")) {
+    comment = String(server.arg("comment"));
+    // open file
+    ptr += comment;
+    ptr += " ";
+  }
+  ptr += "\n";
+  ptr += "</body>\n";
+  ptr += "</html>\n";
+
+  File file = SD.open(file_name, FILE_APPEND);
+  printCommentOnFile(file, comment);
   return ptr;
 }
 
@@ -947,7 +977,13 @@ String sendResult(Result r) {
 
   }
 
-  ptr += "<br><br><br>\n";
+  ptr += "<br>\n";
+  ptr += "<form onsubmit=\"/addcomment\">\n";
+  ptr += "<label for=\"Comment\">Comment:</label><br>\n";
+  ptr += "<input type=\"text\" id=\"comment\" name=\"comment\" onFocus=\"this.select()\"><br>\n";
+  ptr += "<input type=\"submit\" value=\"Submit\"> <br>\n";
+  ptr += "</form> <br>\n";
+
   ptr += " <a href=\"/ls\"> Directory Listing </a> ";
   ptr += "<br><br><br>\n";
   ptr += " <a href=\"/off\"> <button>Set System to Initialize (will not start sequence)</button> </a><br><br><br>\n ";
@@ -959,6 +995,15 @@ String sendResult(Result r) {
   ptr += "</html>\n";
   return ptr;
 
+}
+
+bool printCommentOnFile(File file, String comment) {
+  int i = 0;
+  Result r = results[i];
+  file.print(r.timestamp);
+  file.print(" Log ");
+  file.print(comment.c_str());
+  file.println("");
 }
 
 bool printOnFile(File file) {

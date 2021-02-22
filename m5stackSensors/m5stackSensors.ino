@@ -100,6 +100,8 @@ class Result {
     unsigned int timestamp;
     unsigned int timestate;
     float maxtemp;
+    float avgtemp_up;
+    float avgtemp_down;
     bool relays[NUMRELAYS];
     State state;
     unsigned int workingSensors;
@@ -230,6 +232,41 @@ bool getTimeClientStatus(const char* NTPClientSite) {
   }
 }
 
+bool isASensorUp(int i){
+   if (i==sens_up_1 || i==sens_up_2 || i==sens_up_3 || i==sens_up_4) return true;
+   else return false;
+}
+
+bool isASensorDown(int i){
+   if (i==sens_down_1 || i==sens_down_2 || i==sens_down_3 || i==sens_down_4) return true;
+   else return false;
+}
+
+bool inSensorRange(int i){
+   if (i>=0 && i<NUMSENSORS) return true;
+   else return false;
+}
+
+String allSensorsDown (){
+  String out = "";
+  if(inSensorRange(sens_down_1)) out += String(sens_down_1) + ",";
+  if(inSensorRange(sens_down_2)) out += String(sens_down_2) + ",";
+  if(inSensorRange(sens_down_3)) out += String(sens_down_3) + ",";
+  if(inSensorRange(sens_down_4)) out += String(sens_down_4) + ",";
+  out[strlen(out.c_str())-1] = '\0';
+  return out;
+}
+
+String allSensorsUp (){
+  String out = "";
+  if(inSensorRange(sens_up_1)) out += String(sens_up_1) + ",";
+  if(inSensorRange(sens_up_2)) out += String(sens_up_2) + ",";
+  if(inSensorRange(sens_up_3)) out += String(sens_up_3) + ",";
+  if(inSensorRange(sens_up_4)) out += String(sens_up_4) + ",";
+  out[strlen(out.c_str())-1] = '\0';
+  return out;
+}
+
 void printResult(Result r) {
   M5.Lcd.clear(BLACK);
   M5.Lcd.setTextColor(YELLOW);
@@ -237,14 +274,17 @@ void printResult(Result r) {
   M5.Lcd.setCursor(0, 0);
   M5.Lcd.print ("State ");
   M5.Lcd.println(strStates[getState()]);
-  M5.Lcd.print("Since (sec): ");
-  char temp[24];
-  sprintf(temp, "%d", r.timestate);
-  M5.Lcd.println(temp);
-  M5.Lcd.print("Total (sec): ");
-  sprintf(temp, "%d", r.timestamp - startsessiontime);
-  M5.Lcd.println(temp);
+  char temp1[24];
+  char temp2[24];
+  sprintf(temp1, "%d", r.timestate);
+  sprintf(temp2, "%d", r.timestamp - startsessiontime);
+  M5.Lcd.print("Since/Total: ");
+  M5.Lcd.print(temp1);
+  M5.Lcd.print("/");
+  M5.Lcd.print(temp2);
+  M5.Lcd.println("");
 
+  char temp[24];
   sprintf(temp, "%3.1f", r.maxtemp);
   M5.Lcd.print("MaxTemp(C): ");
   M5.Lcd.println(temp);
@@ -266,21 +306,50 @@ void printResult(Result r) {
   //Serial.print("HEATERS ");
   //Serial.println(temp);
   int columns=0;
+  M5.Lcd.setTextColor(GREEN);
   M5.Lcd.println("Temperatures: ");
   for (int i = 0; i < NUMSENSORS; ++i) {
+    if(isASensorUp(i)) M5.Lcd.setTextColor(RED);
+    else if(isASensorDown(i)) M5.Lcd.setTextColor(MAGENTA);
+    else M5.Lcd.setTextColor(GREEN);
     M5.Lcd.print(i);
     M5.Lcd.print(":");
     M5.Lcd.print(r.sensorReadings[i]);
     columns++;
-    if(columns>=2){
+    if(columns>=3){
       columns=0;
      M5.Lcd.println("");
       }
     else{
-     M5.Lcd.print("    ");
+     M5.Lcd.print("  ");
       }
   }
+  M5.Lcd.setTextColor(GREEN);
   temp[NUMRELAYS] = '\0';
+
+  M5.Lcd.println();
+  M5.Lcd.setTextColor(RED);
+  M5.Lcd.print("Up: ");
+  M5.Lcd.print(r.avgtemp_up);
+  M5.Lcd.print("   ");
+  M5.Lcd.setTextColor(MAGENTA);
+  M5.Lcd.print("Down:");
+  M5.Lcd.print(r.avgtemp_down);
+  M5.Lcd.print(" ");
+  M5.Lcd.println("");
+  M5.Lcd.setTextColor(RED);
+  M5.Lcd.print("(");
+  M5.Lcd.print(allSensorsUp());
+  M5.Lcd.print(")");
+  M5.Lcd.print("   ");
+  M5.Lcd.setTextColor(MAGENTA);
+  M5.Lcd.print("(");
+  M5.Lcd.print(allSensorsDown());
+  M5.Lcd.print(")");
+  M5.Lcd.println("");
+  M5.Lcd.setTextColor(WHITE);
+  M5.Lcd.print("Diff:");
+  M5.Lcd.print(r.avgtemp_down-r.avgtemp_up);
 
   M5.Lcd.setTextColor(BLUE);
   M5.Lcd.setTextSize(2);
@@ -571,17 +640,31 @@ Result getResult() {
   }
   r.workingSensors = 0;
   r.maxtemp = -99.;
+  int nsens_up = 0;
+  int nsens_down = 0;
+  r.avgtemp_up = 0;
+  r.avgtemp_down = 0;
   for (int i = 0; i < NUMSENSORS; ++i) {
     float temp = temperatures[i];
     r.sensorReadings[i] = temp;
     if (temp != 85. && temp != -127. && temp != -0.5 && temp != 0.0) {
       r.workingSensors += 1;
-      r.maxtemp += max(temp,r.maxtemp);
+      r.maxtemp = max(temp,r.maxtemp);
+      if(isASensorUp(i)){
+        r.avgtemp_up += temp;
+        nsens_up++;
+      }
+      if(isASensorDown(i)){
+        r.avgtemp_down += temp;
+        nsens_down++;
+      }
     }
     else {
       //    temp=-127.; //set error value
     }
   }
+  r.avgtemp_up = r.avgtemp_up/nsens_up;
+  r.avgtemp_down = r.avgtemp_down/nsens_down;
   lastResult = r;
   return r;
 }
@@ -844,30 +927,26 @@ String sendSetupSensors() {
   sens_down_2 = atoi(server.arg("sens_down_2").c_str());
   sens_down_3 = atoi(server.arg("sens_down_3").c_str());
   sens_down_4 = atoi(server.arg("sens_down_4").c_str());
+
+  if(!inSensorRange(sens_up_1)) sens_up_1 = -1;
+  if(!inSensorRange(sens_up_2)) sens_up_2 = -1;
+  if(!inSensorRange(sens_up_3)) sens_up_3 = -1;
+  if(!inSensorRange(sens_up_4)) sens_up_4 = -1;
+  if(!inSensorRange(sens_down_1)) sens_down_1 = -1;
+  if(!inSensorRange(sens_down_2)) sens_down_2 = -1;
+  if(!inSensorRange(sens_down_3)) sens_down_3 = -1;
+  if(!inSensorRange(sens_down_4)) sens_down_4 = -1;
   
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
   ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
   ptr += "</head>\n";
   ptr += "<body>\n";
-  ptr += "Updated sensors map: \n <br>";
+  ptr += "Updated sensors map \n <br>";
 
-  ptr += "\n top";
-  
-  if(sens_up_1>=0){ ptr += String(sens_up_1)+" ";};
-  if(sens_up_2>=0){ ptr += String(sens_up_2)+" ";};
-  if(sens_up_3>=0){ ptr += String(sens_up_3)+" ";};
-  if(sens_up_4>=0){ ptr += String(sens_up_4)+" ";};
+  ptr += "\n<br> top: " + allSensorsUp();
 
-  ptr += "\n <br> ";
-
-
-  ptr += "\nbottom: ";
-  
-  if(sens_down_1>=0){ ptr += String(sens_down_1)+" ";};
-  if(sens_down_2>=0){ ptr += String(sens_down_2)+" ";};
-  if(sens_down_3>=0){ ptr += String(sens_down_3)+" ";};
-  if(sens_down_4>=0){ ptr += String(sens_down_4)+" ";};
+  ptr += "\n<br>bottom: " + allSensorsDown();
 
   ptr += "\n";
   
@@ -1021,6 +1100,16 @@ String sendResult(Result r) {
   ptr += "Total time from start = " + String(r.timestamp - startsessiontime) + " sec<br>\n";
 
   ptr += "Max Temperature (C) = " + String(r.maxtemp) + " <br>\n";
+
+  ptr += "Avg Temperature Top (" ;
+  ptr += allSensorsUp();
+  ptr += ") (C) = " + String(r.avgtemp_up) + " <br>\n";
+
+  ptr += "Avg Temperature Bottom (";
+  ptr += allSensorsDown();
+  ptr += ") (C) = " + String(r.avgtemp_down) + " <br>\n";
+
+  ptr += "Delta Temp (Bottom - Top) (C) = " + String(r.avgtemp_down - r.avgtemp_up) + " <br>\n";
 
   for (int i = 0; i < NUMRELAYS; ++i) {
     ptr += "Relay " + String(i) + "  Status " + String(r.relays[i]) + "<br>\n";

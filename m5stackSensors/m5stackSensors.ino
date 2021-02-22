@@ -939,9 +939,18 @@ String sendSetupSensors() {
   
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
-  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+//  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+  ptr += "<script type = \"text/JavaScript\">\n";
+  ptr += " <!--\n";
+  ptr += "    function AutoRefresh( t ) {\"\n";
+  ptr += "       setTimeout(\"location.reload(true);\", t);\n";
+  ptr += "    }\n";
+  ptr += " //-->\n";
+  ptr += "</script>\n";
+  
   ptr += "</head>\n";
-  ptr += "<body>\n";
+//  ptr += "<body>\n";
+  ptr += "<body  onload = \"JavaScript:AutoRefresh(3000);\">";
   ptr += "Updated sensors map \n <br>";
 
   ptr += "\n<br> top: " + allSensorsUp();

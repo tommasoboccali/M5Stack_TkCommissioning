@@ -572,7 +572,6 @@ Result getResult() {
       //    temp=-127.; //set error value
     }
   }
-  r.maxtemp /= r.workingSensors;
   lastResult = r;
   return r;
 }

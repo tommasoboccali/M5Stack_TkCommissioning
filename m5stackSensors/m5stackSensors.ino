@@ -108,6 +108,18 @@ class Result {
 Result results[MAXLOGS];
 Result lastResult;
 
+void updateFileName(){
+  unsigned int num = timeClient.getEpochTime();
+  char temp[40];
+  itoa(num, temp, 10);
+  strcpy(file_name, "/");
+  strcat(file_name, filename_prefix);
+  strcat(file_name, temp);
+  strcat(file_name, ".txt");
+  Serial.print("SD FileName is ");
+  Serial.println(file_name);
+}
+
 void printAlarm(const char* c) {
   M5.Lcd.clear(RED);
   M5.Lcd.setTextColor(BLACK);
@@ -280,8 +292,8 @@ void printResult(Result r) {
   Serial.print(mac[1], HEX);
   Serial.print(":");
   Serial.println(mac[0], HEX);
-  M5.Lcd.println(buffer);
-//  M5.Lcd.println();
+  M5.Lcd.print(buffer);
+  M5.Lcd.println(file_name);
   M5.Lcd.println("A:Off   B:Hon   C:Hoff");
   Serial.println("printResult updated");
 }
@@ -312,40 +324,57 @@ void loopsetup() {
     M5.Lcd.println("End loopsetup");
   }
   // filename create
-  unsigned int num = timeClient.getEpochTime();
-  char temp[40];
-  itoa(num, temp, 10);
-  strcpy(file_name, "/");
-  strcat(file_name, filename_prefix);
-  strcat(file_name, temp);
-  strcat(file_name, ".txt");
-  Serial.print("SD FileName is ");
-  Serial.println(file_name);
+  updateFileName();
 }
 
 
 void initNTP(){
   M5.Lcd.println("3");
   timeClientStatus = timeClient.update();
-  M5.Lcd.println("Press button A to skip NTP time");
   while (!timeClientStatus) {
     M5.Lcd.clear(BLACK);
     M5.Lcd.setCursor(0, 0);
+    M5.Lcd.println("Press button A to skip NTP time");
 
+    if (M5.BtnA.wasPressed()) break;
+    M5.update();
+    if (M5.BtnA.wasPressed()) break;
+    delay(100);
+    if (M5.BtnA.wasPressed()) break;
+
+    M5.Lcd.print(".");
     timeClientStatus = getTimeClientStatus(NTPClientSite1);
+    M5.Lcd.print(".");
     if (timeClientStatus) break;
 
+    if (M5.BtnA.wasPressed()) break;
+    M5.update();
+    if (M5.BtnA.wasPressed()) break;
+    delay(100);
+    if (M5.BtnA.wasPressed()) break;
+
+    M5.Lcd.print(".");
     timeClientStatus = getTimeClientStatus(NTPClientSite2);
+    M5.Lcd.print(".");
     if (timeClientStatus) break;
 
+    if (M5.BtnA.wasPressed()) break;
+    M5.update();
+    if (M5.BtnA.wasPressed()) break;
+    delay(100);
+    if (M5.BtnA.wasPressed()) break;
+
+    M5.Lcd.print(".");
     timeClientStatus = getTimeClientStatus(NTPClientSite3);
+    M5.Lcd.print(".");
     if (timeClientStatus) break;
 
     ArduinoOTA.handle();
 
-    M5.Lcd.println("Push button A...");
+    if (M5.BtnA.wasPressed()) break;
     M5.update();
-    delay(10);
+    if (M5.BtnA.wasPressed()) break;
+    delay(100);
     if (M5.BtnA.wasPressed()) break;
   }  
 }
@@ -737,7 +766,7 @@ void handle_dl() {
   server.send(200, "text/plain", sendFile());
 }
 void handle_rm() {
-  server.send(200, "text/plain", sendRemove());
+  server.send(200, "text/html", sendRemove());
 }
 
 String sendFile() {
@@ -762,24 +791,25 @@ String sendFile() {
 }
 
 String sendNewFile() {
-  String ptr;
-  ptr += "I'm creating a new file... (to be implemented)<br>\n";
-//  ptr += "Setting System to Ready...<br>\n";
-//  bool res2 = setRelaysToOff();
-//  if (res2 == false) {
-//    ptr += "Cannot set relays to off<br>\n";
-//    return (ptr);
-//  }
-//  bool res3 = setState(Ready);
-//  if (res3 == false) {
-//    ptr += "Cannot set state to Ready<br>\n";
-//    return (ptr);
-//  }
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
+  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
+  ptr += "I'm creating a new file... <br>\n";
+  ptr += "</body>\n";
+  ptr += "</html>\n";
+ 
+  updateFileName();
   return ptr;
 }
 
 String sendReady() {
-  String ptr;
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
+  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
   ptr += "Setting System to Ready...<br>\n";
   bool res2 = setRelaysToOff();
   if (res2 == false) {
@@ -791,11 +821,17 @@ String sendReady() {
     ptr += "Cannot set state to Ready<br>\n";
     return (ptr);
   }
+  ptr += "</body>\n";
+  ptr += "</html>\n";
   return ptr;
 }
 
 String sendOff() {
-  String ptr;
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
+  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
   ptr += "Setting System to Initialized...<br>\n";
   bool res2 = setRelaysToOff();
   if (res2 == false) {
@@ -808,18 +844,27 @@ String sendOff() {
     return (ptr);
   }
   ptr += "Now We are Initialized - you can go back and reload<br>\n";
+  ptr += "</body>\n";
+  ptr += "</html>\n";
   return ptr;
 }
 String sendRemove() {
-  String ptr;
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
+  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =ls\"  />  ";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
   ptr += "Removing file ";
   if (server.hasArg("name")) {
     String name = String(server.arg("name"));
     // open file
     ptr += name;
-    ptr += "  ";
+    ptr += " ";
     SD.remove(name);
   }
+  ptr += "\n";
+  ptr += "</body>\n";
+  ptr += "</html>\n";
   return ptr;
 }
 
@@ -875,6 +920,9 @@ String sendResult(Result r) {
 
   ptr += "<h2>IP ADDRESS: " + String(buffer) + "</h2>\n";
 
+  ptr += "Filename = ";
+  ptr += String(file_name);
+  ptr += "<br>\n";
 
   ptr += "Timestamp = ";
   ptr += String(r.timestamp);
@@ -904,7 +952,7 @@ String sendResult(Result r) {
   ptr += "<br><br><br>\n";
   ptr += " <a href=\"/off\"> <button>Set System to Initialize (will not start sequence)</button> </a><br><br><br>\n ";
   ptr += " <a href=\"/ready\"> <button>Set System to Ready and Start Automatic Sequence</button> </a><br><br><br>\n ";
-  ptr += " <a href=\"/newfile\"> <button>New file test</button> </a><br><br><br>\n ";
+  ptr += " <a href=\"/newfile\"> <button>Start a new file</button> </a><br><br><br>\n ";
 
 
   ptr += "</body>\n";

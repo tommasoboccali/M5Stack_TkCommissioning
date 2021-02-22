@@ -1038,8 +1038,8 @@ String sendResult(Result r) {
   }
 
   ptr += "<br>\n";
-  ptr += "<form onsubmit=\"/addcomment\">\n";
-  ptr += "<label for=\"Comment\">Comment:</label><br>\n";
+  ptr += "<form action=\"/addcomment\">\n";
+  ptr += "<label for=\"comment\">Comment:</label><br>\n";
   ptr += "<input type=\"text\" id=\"comment\" name=\"comment\" onFocus=\"this.select()\"><br>\n";
   ptr += "<input type=\"submit\" value=\"Submit\"> <br>\n";
   ptr += "</form> <br>\n";
@@ -1052,13 +1052,13 @@ String sendResult(Result r) {
 
 /*
   ptr += "<br>\n";
-  ptr += "<form setupsensors=\"/setupsensors\">\n";
-  ptr += "<label for=\"Sensors top\">Sensors top   :</label><br>\n";
+  ptr += "<form action=\"/setupsensors\">\n";
+  ptr += "<label for=\"sens_up_1\">Sensors top   :</label><br>\n";
   ptr += "<input type=\"text\" id=\"sens_up_1\" name=\"sens_up_1\" value=" + String(sens_up_1) + ">\n";
   ptr += "<input type=\"text\" id=\"sens_up_2\" name=\"sens_up_2\" value=" + String(sens_up_2) + ">\n";
   ptr += "<input type=\"text\" id=\"sens_up_3\" name=\"sens_up_3\" value=" + String(sens_up_3) + ">\n";
   ptr += "<input type=\"text\" id=\"sens_up_4\" name=\"sens_up_4\" value=" + String(sens_up_4) + "><br>\n";
-  ptr += "<label for=\"Sensors bottom\">Sensors bottom:</label><br>\n";
+  ptr += "<label for=\"sens_down_1\">Sensors bottom:</label><br>\n";
   ptr += "<input type=\"text\" id=\"sens_down_1\" name=\"sens_down_1\" value=" + String(sens_down_1) + ">\n";
   ptr += "<input type=\"text\" id=\"sens_down_2\" name=\"sens_down_2\" value=" + String(sens_down_2) + ">\n";
   ptr += "<input type=\"text\" id=\"sens_down_3\" name=\"sens_down_3\" value=" + String(sens_down_3) + ">\n";

@@ -108,6 +108,17 @@ class Result {
 Result results[MAXLOGS];
 Result lastResult;
 
+/*
+int sens_up_1 = -1;
+int sens_up_2 = -1;
+int sens_up_3 = -1;
+int sens_up_4 = -1;
+int sens_down_1 = -1;
+int sens_down_2 = -1;
+int sens_down_3 = -1;
+int sens_down_4 = -1;
+*/
+
 void updateFileName(){
   unsigned int num = timeClient.getEpochTime();
   char temp[40];
@@ -521,6 +532,7 @@ void setup() {
   server.on("/ready", handle_ready);
   server.on("/newfile", handle_newfile);
   server.on("/addcomment", handle_addcomment);
+//  server.on("/setupsensors", handle_setupsensors);
 
   server.on("/ls", handle_ls);
   server.on("/dl", handle_dl);
@@ -754,8 +766,14 @@ void handle_newfile() {
 }
 
 void handle_addcomment() {
-  server.send(200, "text/html", sendAddComment()); //printCommentOnFile(file, comment)
+  server.send(200, "text/html", sendAddComment());
 }
+
+/*
+void handle_setupsensors() {
+  server.send(200, "text/html", sendSetupSensors());
+}
+*/
 
 void handle_ready() {
   server.send(200, "text/html", sendReady());
@@ -819,6 +837,48 @@ String sendAddComment() {
   file.close();
   return ptr;
 }
+
+/*
+String sendSetupSensors() {
+  sens_up_1 = atoi(server.arg("sens_up_1").c_str());
+  sens_up_2 = atoi(server.arg("sens_up_2").c_str());
+  sens_up_3 = atoi(server.arg("sens_up_3").c_str());
+  sens_up_4 = atoi(server.arg("sens_up_4").c_str());
+
+  sens_down_1 = atoi(server.arg("sens_down_1").c_str());
+  sens_down_2 = atoi(server.arg("sens_down_2").c_str());
+  sens_down_3 = atoi(server.arg("sens_down_3").c_str());
+  sens_down_4 = atoi(server.arg("sens_down_4").c_str());
+  
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
+//  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
+  ptr += "Updated sensors map: \n <br>";
+
+  ptr += "\n top";
+  
+  if(sens_up_1>=0){ ptr += String(sens_up_1)+" ";};
+  if(sens_up_2>=0){ ptr += String(sens_up_2)+" ";};
+  if(sens_up_3>=0){ ptr += String(sens_up_3)+" ";};
+  if(sens_up_4>=0){ ptr += String(sens_up_4)+" ";};
+
+  ptr += "\n <br> ";
+
+
+  ptr += "\nbottom: ";
+  
+  if(sens_down_1>=0){ ptr += String(sens_down_1)+" ";};
+  if(sens_down_2>=0){ ptr += String(sens_down_2)+" ";};
+  if(sens_down_3>=0){ ptr += String(sens_down_3)+" ";};
+  if(sens_down_4>=0){ ptr += String(sens_down_4)+" ";};
+
+  ptr += "\n";
+  
+  return ptr;
+}
+*/
 
 String sendNewFile() {
   String ptr = "<!DOCTYPE html> <html>\n";
@@ -966,7 +1026,7 @@ String sendResult(Result r) {
 
   ptr += "Total time from start = " + String(r.timestamp - startsessiontime) + " sec<br>\n";
 
-  ptr += "Average Temperature (C) = " + String(r.maxtemp) + " sec<br>\n";
+  ptr += "Max Temperature (C) = " + String(r.maxtemp) + " <br>\n";
 
   for (int i = 0; i < NUMRELAYS; ++i) {
     ptr += "Relay " + String(i) + "  Status " + String(r.relays[i]) + "<br>\n";
@@ -990,6 +1050,22 @@ String sendResult(Result r) {
   ptr += " <a href=\"/ready\"> <button>Set System to Ready and Start Automatic Sequence</button> </a><br><br><br>\n ";
   ptr += " <a href=\"/newfile\"> <button>Start a new file</button> </a><br><br><br>\n ";
 
+/*
+  ptr += "<br>\n";
+  ptr += "<form setupsensors=\"/setupsensors\">\n";
+  ptr += "<label for=\"Sensors top\">Sensors top   :</label><br>\n";
+  ptr += "<input type=\"text\" id=\"sens_up_1\" name=\"sens_up_1\" value=" + String(sens_up_1) + ">\n";
+  ptr += "<input type=\"text\" id=\"sens_up_2\" name=\"sens_up_2\" value=" + String(sens_up_2) + ">\n";
+  ptr += "<input type=\"text\" id=\"sens_up_3\" name=\"sens_up_3\" value=" + String(sens_up_3) + ">\n";
+  ptr += "<input type=\"text\" id=\"sens_up_4\" name=\"sens_up_4\" value=" + String(sens_up_4) + "><br>\n";
+  ptr += "<label for=\"Sensors bottom\">Sensors bottom:</label><br>\n";
+  ptr += "<input type=\"text\" id=\"sens_down_1\" name=\"sens_down_1\" value=" + String(sens_down_1) + ">\n";
+  ptr += "<input type=\"text\" id=\"sens_down_2\" name=\"sens_down_2\" value=" + String(sens_down_2) + ">\n";
+  ptr += "<input type=\"text\" id=\"sens_down_3\" name=\"sens_down_3\" value=" + String(sens_down_3) + ">\n";
+  ptr += "<input type=\"text\" id=\"sens_down_4\" name=\"sens_down_4\" value=" + String(sens_down_4) + ">\n";
+  ptr += "<br> <input type=\"submit\" value=\"Setup sensors\"> <br>\n";
+  ptr += "</form> <br>\n";
+*/
 
   ptr += "</body>\n";
   ptr += "</html>\n";

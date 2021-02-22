@@ -23,9 +23,11 @@ file1 = open('tmplog', 'r')
 lines = file1.readlines()
 for line in lines:
     spl = line.split()
-    ts = int(line[0])
-    text = line[1:]
+    ts = int(spl[0])
+    text = " ".join(spl[1:])
     timestamp_moments[ts]=text.rstrip()
+
+print (timestamp_moments)
 
 #sensors
 # 0,1,2,3,4,5,6,7

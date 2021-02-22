@@ -99,7 +99,7 @@ class Result {
     float sensorReadings[NUMSENSORS];
     unsigned int timestamp;
     unsigned int timestate;
-    float avgtemp;
+    float maxtemp;
     bool relays[NUMRELAYS];
     State state;
     unsigned int workingSensors;
@@ -236,8 +236,8 @@ void printResult(Result r) {
   sprintf(temp, "%d", r.timestamp - startsessiontime);
   M5.Lcd.println(temp);
 
-  sprintf(temp, "%3.1f", r.avgtemp);
-  M5.Lcd.print("Avg.Temp(C): ");
+  sprintf(temp, "%3.1f", r.maxtemp);
+  M5.Lcd.print("MaxTemp(C): ");
   M5.Lcd.println(temp);
   M5.Lcd.print("N. sens.: ");
   M5.Lcd.print(r.workingSensors);
@@ -560,19 +560,19 @@ Result getResult() {
     r.relays[i] = heaters[i];
   }
   r.workingSensors = 0;
-  r.avgtemp = 0.;
+  r.maxtemp = -99.;
   for (int i = 0; i < NUMSENSORS; ++i) {
     float temp = temperatures[i];
     r.sensorReadings[i] = temp;
     if (temp != 85. && temp != -127. && temp != -0.5 && temp != 0.0) {
       r.workingSensors += 1;
-      r.avgtemp += temp;
+      r.maxtemp += max(temp,r.maxtemp);
     }
     else {
       //    temp=-127.; //set error value
     }
   }
-  r.avgtemp /= r.workingSensors;
+  r.maxtemp /= r.workingSensors;
   lastResult = r;
   return r;
 }
@@ -599,7 +599,7 @@ bool goToHeatingOn() {
   // read temp
 
 
-  float temp = readAvgTemp();
+  float temp = readMaxTemp();
   if (temp < TEMPINIMIN || temp > TEMPINIMAX) {
     printAlarm("Initial temperature not within limits.");
     exit (3);
@@ -625,7 +625,7 @@ bool reallyGoToHeatingOff() {
 
 bool goToHeatingOff() {
   // read temp
-  float temp = readAvgTemp();
+  float temp = readMaxTemp();
   if (temp < TEMPINIMIN || temp > TEMPINIMAX) {
     printAlarm("Initial temperature not within limits.");
     exit (3);
@@ -666,8 +666,8 @@ if (loopNO % 5000 == 0) {
   Serial.print(strStates[getState()]);
   Serial.print ( "  time: ");
   Serial.print(timeClient.getEpochTime());
-  Serial.print ("  TempAvg = ");
-  Serial.println(readAvgTemp());
+  Serial.print ("  MaxTemp = ");
+  Serial.println(readMaxTemp());
 }
 
 if (timeClient.getEpochTime() - startsessiontime > MAXOPTIME) {
@@ -731,7 +731,7 @@ if (g == Ready || (g == HeatingOff && (timeClient.getEpochTime() - offset > MINH
 
 if (g == HeatingOn) {
   //eventually go to HeatingOff after some time / temperature
-  float temp = readAvgTemp();
+  float temp = readMaxTemp();
   if (temp > MAXTEMPON || (timeClient.getEpochTime() - offset > MAXHEATINGON)  ) {
     //      Serial.println("Switching heating off");
 
@@ -817,6 +817,7 @@ String sendAddComment() {
 
   File file = SD.open(file_name, FILE_APPEND);
   printCommentOnFile(file, comment);
+  file.close();
   return ptr;
 }
 
@@ -966,7 +967,7 @@ String sendResult(Result r) {
 
   ptr += "Total time from start = " + String(r.timestamp - startsessiontime) + " sec<br>\n";
 
-  ptr += "Average Temperature (C) = " + String(r.avgtemp) + " sec<br>\n";
+  ptr += "Average Temperature (C) = " + String(r.maxtemp) + " sec<br>\n";
 
   for (int i = 0; i < NUMRELAYS; ++i) {
     ptr += "Relay " + String(i) + "  Status " + String(r.relays[i]) + "<br>\n";
@@ -1052,7 +1053,7 @@ void appendLogs() {
 //  float sensorReadings[NUMSENSORS];
 // unsigned int timestamp;
 //unsigned int timestate;
-//float avgtemp;
+//float maxtemp;
 //bool relays[NUMRELAYS];
 //};
 
@@ -1096,6 +1097,6 @@ void listDir(String &ptr, fs::FS &fs, const char * dirname, uint8_t levels) {
   }
 }
 
-float readAvgTemp() {
-  return lastResult.avgtemp;
+float readMaxTemp() {
+  return lastResult.maxtemp;
 }

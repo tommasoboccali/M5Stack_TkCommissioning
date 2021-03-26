@@ -305,3 +305,42 @@ TS = 1613751077  tutto spento
 
 
 
+1616752677 Log basetta fatta con colla conduttiova
+1616752690 Log spalmata con maschera
+1616752719 Log sotto 5 3
+1616752732 Log  sopra 61 
+1616752981 Log  v=20
+1616753059 Log ampere basso?
+1616753072 Log 0.29A
+1616753112 Log spengo
+1616753850 Log sopra: 6 - 1 sotto: 5 - 3  Ma i dati non tornano (sopra piu caldo di sotto) perche' non abbiamo messo la pasta termica per migliorare il contatto dei sensori. Adesso mettiamo la pasta termica sui sensori
+1616754062 Log STABLE BEAM
+1616754088 Log 19.28 V 0.48 A
+1616754205 Log aggiunto isolante
+1616754295 Log 19.28 V 0.475 A
+1616754375 Log aumento voltagggio 24.0 V 0.582 A
+1616754520 Log 24.0 V 0.569 A
+1616754623 Log FFINE TEST . La differenza di temperatura sta aumentando e non sappiamo il motivo....
+1616755038 Log STABLE BEAM
+1616755103 Log NUOVO TEST 19.2V 0.48A
+1616755284 Log l'isolamento dei sensori non era buono. Chiudiamo gli spifferi 
+1616755376 Log esperimento aperto
+1616755531 Log riprendiamo i dati
+1616755919 Log aumento voltaggio a 28V e sposto la ventola per dissipare di piu'
+1616756036 Log 28V 0.665A
+1616756087 Log v=32 a=0.757
+1616756386 Log spento, si fa raffreddare
+1616757021 Log miglior contatto termico?
+1616757099 Log v=32 a=.843
+1616757229 Log v=32 a=.754
+1616757462 Log v=32 a=.716
+1616757539 Log fermiamo tutto
+1616757846 Log rimetto quello cotto senza v
+1616757859 Log sopra  -- 4 0
+1616757872 Log sotto  -- 7 2
+1616757951 Log ventoal sopra
+1616757990 Log v =24 a= .6
+1616758366 Log v =24 a= .564
+1616758534 Log 30.0V 0.697A
+1616758832 Log spengo tutto
+1616759206 Log Nel test precedente abbiamo usato due panini contemporaneamente per errore. Cmq visto che R1 e' circa R2, dovrebbe essere ok

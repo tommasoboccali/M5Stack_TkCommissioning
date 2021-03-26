@@ -8,6 +8,7 @@
 1616757841 State Initialized timeState 10 heaters 0000 temp_readings 26.12 41.25 23.69 25.37 23.50 41.00 28.56 23.69 
 1616757842 State Initialized timeState 11 heaters 0000 temp_readings 26.12 41.19 23.69 25.37 23.50 41.00 28.56 23.69 
 1616757843 State Initialized timeState 12 heaters 0000 temp_readings 26.06 41.19 23.69 25.31 23.50 40.94 28.56 23.69 
+1616757846 Log rimetto quello cotto senza v
 1616757846 State Initialized timeState 15 heaters 0000 temp_readings 26.00 41.13 23.69 25.25 23.50 40.88 28.50 23.69 
 1616757847 State Initialized timeState 16 heaters 0000 temp_readings 25.94 41.13 23.69 25.25 23.50 40.88 28.50 23.69 
 1616757848 State Initialized timeState 17 heaters 0000 temp_readings 25.94 41.06 23.69 25.19 23.50 40.81 28.50 23.69 
@@ -28,6 +29,7 @@
 1616757867 State Initialized timeState 36 heaters 0000 temp_readings 25.44 40.69 23.87 24.87 23.50 40.44 28.12 23.69 
 1616757868 State Initialized timeState 37 heaters 0000 temp_readings 25.44 40.69 23.87 24.87 23.50 40.44 28.12 23.69 
 1616757869 State Initialized timeState 38 heaters 0000 temp_readings 25.37 40.69 23.94 24.81 23.56 40.38 28.12 23.75 
+1616757859 Log sopra  -- 4 0
 1616757872 State Initialized timeState 41 heaters 0000 temp_readings 25.31 40.56 24.00 24.75 23.50 40.31 28.06 23.69 
 1616757873 State Initialized timeState 42 heaters 0000 temp_readings 25.31 40.56 24.06 24.75 23.50 40.31 28.06 23.69 
 1616757874 State Initialized timeState 43 heaters 0000 temp_readings 25.31 40.50 24.06 24.69 23.50 40.25 28.06 23.69 
@@ -38,6 +40,7 @@
 1616757881 State Initialized timeState 50 heaters 0000 temp_readings 25.12 40.13 24.06 24.69 23.56 40.13 28.75 23.75 
 1616757882 State Initialized timeState 51 heaters 0000 temp_readings 25.12 40.13 24.06 24.69 23.56 40.13 28.69 23.69 
 1616757883 State Initialized timeState 52 heaters 0000 temp_readings 25.06 40.06 24.06 24.75 23.56 40.06 28.69 23.75 
+1616757872 Log sotto  -- 7 2
 1616757885 State Initialized timeState 54 heaters 0000 temp_readings 24.94 40.00 24.06 24.81 23.56 40.06 28.56 23.75 
 1616757886 State Initialized timeState 55 heaters 0000 temp_readings 24.75 40.00 24.06 24.81 23.56 40.00 28.50 23.75 
 1616757887 State Initialized timeState 56 heaters 0000 temp_readings 24.50 39.94 24.12 24.81 23.56 40.00 28.44 23.75 
@@ -88,6 +91,7 @@
 1616757946 State Initialized timeState 115 heaters 0000 temp_readings 24.06 38.50 24.19 24.69 23.87 38.75 27.69 24.00 
 1616757947 State Initialized timeState 116 heaters 0000 temp_readings 24.06 38.44 24.12 24.75 23.87 38.69 27.62 24.00 
 1616757949 State Initialized timeState 118 heaters 0000 temp_readings 24.06 38.44 24.12 24.69 23.87 38.63 27.62 24.00 
+1616757951 Log ventoal sopra
 1616757951 State Initialized timeState 120 heaters 0000 temp_readings 24.00 38.44 24.19 24.69 23.87 38.63 27.62 24.00 
 1616757952 State Initialized timeState 121 heaters 0000 temp_readings 24.00 38.38 24.19 24.69 23.87 38.63 27.62 24.00 
 1616757953 State Initialized timeState 122 heaters 0000 temp_readings 24.00 38.38 24.19 24.69 23.87 38.56 27.62 24.00 
@@ -128,6 +132,7 @@
 1616757998 State HeatingOn timeState 9 heaters 1111 temp_readings 29.44 37.81 29.31 24.37 29.06 38.19 27.25 29.25 
 1616757999 State HeatingOn timeState 10 heaters 1111 temp_readings 29.69 37.88 29.50 24.37 29.19 38.31 27.25 29.44 
 1616758000 State HeatingOn timeState 11 heaters 1111 temp_readings 29.81 37.94 29.62 24.31 29.44 38.44 27.25 29.62 
+1616757990 Log v =24 a= .6
 1616758003 State HeatingOn timeState 14 heaters 1111 temp_readings 30.37 38.19 30.19 24.31 29.94 38.69 27.19 30.12 
 1616758004 State HeatingOn timeState 15 heaters 1111 temp_readings 30.56 38.31 30.37 24.31 30.12 38.75 27.12 30.31 
 1616758005 State HeatingOn timeState 16 heaters 1111 temp_readings 30.87 38.38 30.69 24.31 30.44 38.81 27.00 30.62 
@@ -408,6 +413,7 @@
 1616758362 State HeatingOn timeState 373 heaters 1111 temp_readings 45.94 52.44 45.88 23.75 43.69 51.06 27.12 45.56 
 1616758363 State HeatingOn timeState 374 heaters 1111 temp_readings 45.94 52.50 45.88 23.75 43.69 51.06 27.12 45.56 
 1616758364 State HeatingOn timeState 375 heaters 1111 temp_readings 46.00 52.50 45.88 23.75 43.69 51.06 27.12 45.56 
+1616758366 Log v =24 a= .564
 1616758366 State HeatingOn timeState 377 heaters 1111 temp_readings 46.00 52.56 45.94 23.75 43.69 51.13 27.19 45.63 
 1616758368 State HeatingOn timeState 379 heaters 1111 temp_readings 46.00 52.56 45.94 23.75 43.69 51.06 27.19 45.56 
 1616758369 State HeatingOn timeState 380 heaters 1111 temp_readings 46.00 52.56 45.94 23.75 43.69 51.13 27.19 45.56 
@@ -538,6 +544,7 @@
 1616758529 State HeatingOn timeState 540 heaters 1111 temp_readings 47.50 54.63 47.38 23.81 44.94 53.25 27.56 46.94 
 1616758530 State HeatingOn timeState 541 heaters 1111 temp_readings 47.63 54.75 47.50 23.87 45.06 53.31 27.50 47.06 
 1616758532 State HeatingOn timeState 543 heaters 1111 temp_readings 47.75 54.81 47.63 23.81 45.13 53.44 27.56 47.19 
+1616758534 Log 30.0V 0.697A
 1616758534 State HeatingOn timeState 545 heaters 1111 temp_readings 47.88 54.94 47.75 23.87 45.25 53.56 27.56 47.31 
 1616758535 State HeatingOn timeState 546 heaters 1111 temp_readings 47.94 55.00 47.81 23.81 45.38 53.63 27.56 47.38 
 1616758536 State HeatingOn timeState 547 heaters 1111 temp_readings 48.13 55.19 47.94 23.81 45.44 53.75 27.56 47.56 
@@ -778,6 +785,7 @@
 1616758840 State HeatingOff timeState 4 heaters 0000 temp_readings 57.56 66.44 57.31 23.94 53.19 64.37 29.19 56.50 
 1616758842 State HeatingOff timeState 6 heaters 0000 temp_readings 57.56 66.37 57.31 23.94 53.19 64.31 29.25 56.50 
 1616758843 State HeatingOff timeState 7 heaters 0000 temp_readings 57.56 66.31 57.31 23.94 53.25 64.19 29.25 56.50 
+1616758832 Log spengo tutto
 1616758845 State HeatingOff timeState 9 heaters 0000 temp_readings 57.56 66.12 57.38 23.94 53.31 63.94 29.31 56.50 
 1616758846 State HeatingOff timeState 10 heaters 0000 temp_readings 57.56 66.00 57.38 23.94 53.31 63.81 29.31 56.50 
 1616758847 State HeatingOff timeState 11 heaters 0000 temp_readings 57.63 65.81 57.38 23.94 53.31 63.56 29.31 56.56 
@@ -1058,6 +1066,7 @@
 1616759201 State HeatingOff timeState 365 heaters 0000 temp_readings 50.75 40.75 47.94 23.69 24.06 42.56 24.06 49.00 
 1616759203 State HeatingOff timeState 367 heaters 0000 temp_readings 50.69 40.69 47.88 23.69 24.06 42.56 24.00 48.94 
 1616759204 State HeatingOff timeState 368 heaters 0000 temp_readings 50.69 40.69 47.88 23.69 24.00 42.56 24.00 48.88 
+1616759206 Log Nel test precedente abbiamo usato due panini contemporaneamente per errore. Cmq visto che R1 è circa R2, dovrebbe essere ok
 1616759206 State HeatingOff timeState 370 heaters 0000 temp_readings 50.56 40.69 47.75 23.69 24.00 42.50 24.00 48.81 
 1616759207 State HeatingOff timeState 371 heaters 0000 temp_readings 50.56 40.63 47.75 23.69 24.00 42.50 24.00 48.81 
 1616759208 State HeatingOff timeState 372 heaters 0000 temp_readings 50.50 40.63 47.69 23.75 23.94 42.44 24.00 48.75 

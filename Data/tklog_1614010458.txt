@@ -1,0 +1,10 @@
+1614010458 State Initialized timeState 0 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010460 State Initialized timeState 2 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010462 State Initialized timeState 4 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010463 State Initialized timeState 5 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010464 State Initialized timeState 6 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010465 State Initialized timeState 7 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010466 State Initialized timeState 8 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010468 State Initialized timeState 10 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010469 State Initialized timeState 11 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+1614010470 State Initialized timeState 12 heaters 0000 temp_readings 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 

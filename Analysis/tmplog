@@ -1,9 +1,6 @@
-1616757846 Log rimetto quello cotto senza v
-1616757859 Log sopra  -- 4 0
-1616757872 Log sotto  -- 7 2
-1616757951 Log ventoal sopra
-1616757990 Log v =24 a= .6
-1616758366 Log v =24 a= .564
-1616758534 Log 30.0V 0.697A
-1616758832 Log spengo tutto
-1616759206 Log Nel test precedente abbiamo usato due panini contemporaneamente per errore. Cmq visto che R1 e' circa R2, dovrebbe essere ok
+1619107481 Log Accendo la ventola (prima era spenta, nel test a panino secco)
+1619107949 Log V=19.0V I=479mA
+1619107976 Log V=24.0V I=600mA
+1619108573 Log V=24.0V I=584mA
+1619108614 Log V=30.0V I=720mA
+1619109422 Log V=30.0V I=688mA

@@ -1,3 +1,4 @@
+1619107481 Log Accendo la ventola (prima era spenta, nel test a panino secco)
 1619107481 State HeatingOn timeState 284 heaters 1111 temp_readings 24.44 24.50 47.38 35.06 24.31 49.19 24.19 35.00 
 1619107482 State HeatingOn timeState 285 heaters 1111 temp_readings 24.44 24.50 47.31 35.00 24.31 49.25 24.19 35.00 
 1619107483 State HeatingOn timeState 286 heaters 1111 temp_readings 24.44 24.50 47.31 34.94 24.31 49.25 24.19 34.94 
@@ -358,6 +359,7 @@
 1619107944 State HeatingOn timeState 747 heaters 1111 temp_readings 24.44 24.44 40.13 27.87 24.31 42.19 24.19 27.75 
 1619107945 State HeatingOn timeState 748 heaters 1111 temp_readings 24.44 24.44 40.06 27.81 24.31 42.19 24.19 27.75 
 1619107947 State HeatingOn timeState 750 heaters 1111 temp_readings 24.44 24.44 40.06 27.81 24.25 42.19 24.25 27.75 
+1619107949 Log V=19.0V I=479mA
 1619107949 State HeatingOn timeState 752 heaters 1111 temp_readings 24.44 24.44 40.13 27.81 24.31 42.25 24.25 27.69 
 1619107950 State HeatingOn timeState 753 heaters 1111 temp_readings 24.44 24.44 40.06 27.81 24.31 42.19 24.25 27.69 
 1619107951 State HeatingOn timeState 754 heaters 1111 temp_readings 24.44 24.44 40.06 27.81 24.31 42.13 24.25 27.69 
@@ -378,6 +380,7 @@
 1619107971 State HeatingOn timeState 774 heaters 1111 temp_readings 24.37 24.44 40.19 27.62 24.25 42.38 24.19 27.50 
 1619107972 State HeatingOn timeState 775 heaters 1111 temp_readings 24.37 24.44 40.19 27.62 24.25 42.44 24.25 27.50 
 1619107973 State HeatingOn timeState 776 heaters 1111 temp_readings 24.31 24.44 40.25 27.62 24.25 42.50 24.25 27.50 
+1619107976 Log V=24.0V I=600mA
 1619107976 State HeatingOn timeState 779 heaters 1111 temp_readings 24.31 24.44 40.31 27.62 24.25 42.63 24.19 27.50 
 1619107977 State HeatingOn timeState 780 heaters 1111 temp_readings 24.37 24.44 40.31 27.56 24.25 42.63 24.19 27.50 
 1619107978 State HeatingOn timeState 781 heaters 1111 temp_readings 24.31 24.44 40.38 27.56 24.25 42.69 24.19 27.50 
@@ -838,6 +841,7 @@
 1619108569 State HeatingOn timeState 1372 heaters 1111 temp_readings 24.12 24.50 48.00 24.44 24.31 51.19 24.31 24.56 
 1619108570 State HeatingOn timeState 1373 heaters 1111 temp_readings 24.12 24.50 48.00 24.50 24.31 51.19 24.31 24.56 
 1619108571 State HeatingOn timeState 1374 heaters 1111 temp_readings 24.12 24.44 48.00 24.50 24.31 51.19 24.31 24.56 
+1619108573 Log V=24.0V I=584mA
 1619108573 State HeatingOn timeState 1376 heaters 1111 temp_readings 24.06 24.50 48.06 24.44 24.31 51.25 24.31 24.56 
 1619108575 State HeatingOn timeState 1378 heaters 1111 temp_readings 24.06 24.44 48.06 24.50 24.31 51.19 24.31 24.50 
 1619108576 State HeatingOn timeState 1379 heaters 1111 temp_readings 24.06 24.50 48.00 24.44 24.31 51.25 24.31 24.56 
@@ -868,6 +872,7 @@
 1619108609 State HeatingOn timeState 1412 heaters 1111 temp_readings 24.19 24.44 48.31 24.37 24.25 51.81 24.31 24.50 
 1619108610 State HeatingOn timeState 1413 heaters 1111 temp_readings 24.19 24.44 48.38 24.44 24.31 51.88 24.25 24.50 
 1619108611 State HeatingOn timeState 1414 heaters 1111 temp_readings 24.25 24.50 48.44 24.44 24.31 51.94 24.31 24.50 
+1619108614 Log V=30.0V I=720mA
 1619108614 State HeatingOn timeState 1417 heaters 1111 temp_readings 24.25 24.50 48.56 24.44 24.31 52.06 24.25 24.50 
 1619108615 State HeatingOn timeState 1418 heaters 1111 temp_readings 24.25 24.50 48.63 24.44 24.31 52.13 24.25 24.50 
 1619108616 State HeatingOn timeState 1419 heaters 1111 temp_readings 24.19 24.50 48.69 24.44 24.31 52.19 24.31 24.50 
@@ -1488,6 +1493,7 @@
 1619109417 State HeatingOn timeState 2220 heaters 1111 temp_readings 24.19 24.81 61.06 24.56 24.69 63.31 24.62 24.62 
 1619109418 State HeatingOn timeState 2221 heaters 1111 temp_readings 24.19 24.81 61.25 24.56 24.62 63.06 24.62 24.62 
 1619109420 State HeatingOn timeState 2223 heaters 1111 temp_readings 24.19 24.75 61.31 24.56 24.62 63.00 24.62 24.62 
+1619109422 Log V=30.0V I=688mA
 1619109422 State HeatingOn timeState 2225 heaters 1111 temp_readings 24.25 24.75 61.44 24.56 24.62 62.75 24.62 24.62 
 1619109423 State HeatingOn timeState 2226 heaters 1111 temp_readings 24.19 24.75 61.44 24.56 24.62 62.63 24.62 24.62 
 1619109424 State HeatingOn timeState 2227 heaters 1111 temp_readings 24.25 24.75 61.50 24.56 24.62 62.44 24.62 24.62 

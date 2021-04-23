@@ -429,3 +429,22 @@ Aumentiamo la temperatura del sistema di raffreddamento a 25 gradi
 IMPORTANTE! Il secondo panino NON è a vuoto, ma econ foglio cotto senza vuoto (scaldino 5, piastra fredda 2)
 
 
+--------------------- nuovo test julabo dopo cottura a vuoto, sia pasta blu sia film
+
+Updated sensors map
+
+top: 5,3
+bottom: 2,4 
+
+Panino colla blu (scaldino 3, piastra fredda 4). Panino con foglio cotto senza vuoto (scaldino 5, piastra fredda 2)
+
+
+timestamp 1619175261
+
+acceso julabo, settaggio a 25C
+
+pero julabo sta ancora partendo ...
+
+20W per modulo di riscaldamento
+
+1619175926 spengo tutto

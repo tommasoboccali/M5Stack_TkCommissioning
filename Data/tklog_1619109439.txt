@@ -1,0 +1,10 @@
+1619109436 State HeatingOn timeState 2239 heaters 1111 temp_readings 24.19 24.69 61.31 24.50 24.56 61.38 24.56 24.56 
+1619109437 State HeatingOn timeState 2240 heaters 1111 temp_readings 24.25 24.62 61.31 24.50 24.56 61.31 24.56 24.56 
+1619109438 State HeatingOn timeState 2241 heaters 1111 temp_readings 24.19 24.69 61.25 24.50 24.56 61.25 24.56 24.56 
+1619109439 State HeatingOn timeState 2242 heaters 1111 temp_readings 24.25 24.62 61.25 24.50 24.56 61.13 24.56 24.56 
+1619109440 State HeatingOn timeState 2243 heaters 1111 temp_readings 24.19 24.62 61.19 24.50 24.50 61.06 24.56 24.56 
+1619109441 State HeatingOn timeState 2244 heaters 1111 temp_readings 24.19 24.62 61.13 24.50 24.50 61.00 24.56 24.50 
+1619109442 State HeatingOn timeState 2245 heaters 1111 temp_readings 24.19 24.62 61.06 24.50 24.50 60.81 24.56 24.50 
+1619109444 State HeatingOn timeState 2247 heaters 1111 temp_readings 24.25 24.62 61.00 24.50 24.50 60.75 24.56 24.50 
+1619109445 State HeatingOn timeState 2248 heaters 1111 temp_readings 24.25 24.56 60.94 24.50 24.50 60.63 24.56 24.50 
+1619109446 State HeatingOn timeState 2249 heaters 1111 temp_readings 24.19 24.56 60.94 24.50 24.50 60.63 24.56 24.50 

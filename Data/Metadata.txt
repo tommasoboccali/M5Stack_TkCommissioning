@@ -344,3 +344,107 @@ TS = 1613751077  tutto spento
 1616758534 Log 30.0V 0.697A
 1616758832 Log spengo tutto
 1616759206 Log Nel test precedente abbiamo usato due panini contemporaneamente per errore. Cmq visto che R1 e' circa R2, dovrebbe essere ok
+
+tests andrea e silvio (e si vede dai log, maremma maiala...
+
+probabilmente sensore 7, 3 sotto, ma chi puoà dirlo ...
+
+
+1619104965 Log Test con due soli sensori AVVITATI. Panino con la roba blu
+1619105186 Log V=19.0V I=500mA
+1619105586 Log V=19.0V I=475mA
+1619105923 Log V=19.0V I=472mA
+1619105976 Log V=24.0V I=592mA
+1619106326 Log V=24.0V I=575mA
+1619106392 Log V=30.0V I=713mA
+1619106871 Log V=30.0V I=682mA
+1619107066 Log V=30.0V I=681mA
+1619107234 Log 
+1619107248 Log Test con due soli sensori AVVITATI. Panino a secco
+1619107260 Log V=19.0V I=514mA
+1619107481 Log Accendo la ventola (prima era spenta, nel test a panino secco)
+1619107949 Log V=19.0V I=479mA
+1619107976 Log V=24.0V I=600mA
+1619108573 Log V=24.0V I=584mA
+1619108614 Log V=30.0V I=720mA
+1619109422 Log V=30.0V I=688mA
+
+Test con due soli sensori AVVITATI. Panino con la roba blu
+
+Test con due soli sensori AVVITATI. Panino a secco
+
+Accendo la ventola (prima era spenta, nel test a panino secco)
+
+
+V=30.0V I=688mA
+
+V=30.0V I=1.566A 
+I somma delle due correnti
+
+
+aprile 23
+============================================================
+
+161916 e oltre
+
+
+Test con raffreddamento. Panino colla blu (scaldino 3, piastra fredda 4). Panino con foglio cotto senza vuoto (scaldino 5, piastra fredda 2)
+
+NB. I sensori sono chiamati up/down in base alla posizione fisica. Ora ci aspettiamo che up (che ha lo scaldino) sia piu caldo di down.
+
+Le due resistenza sono di circa 37 ohm con una differenza del 2%
+
+
+Il raffreddamento sta oscillando. Ora dice 18 gradi e sta scaldando (vedi foto silvio)
+
+Il raffreddamento ha raggiunto il plateau a 20 gradi
+
+1 e 6 misurano la temparatura dell'aria vicino ai sensori
+7 e 0 misurano la temperatura dello scheletro di alluminio
+
+abbiamo aggiunto dell'isolamento al sistema
+
+
+NB. I sensori erano sullo scaldino
+
+Stiamo girando i sensori per essere sull'alluminio invece che sullo scaldino
+
+Troppa differenza, cerchiamo di migliorare l'isolamento 
+
+
+Operazione finita
+
+Abbiamo migliorato l'isolamento della piastra fredda. Facciamo un nuovo test. Sistema di raffreddamento e' fisso a 20 gradi
+
+
+V = 19.0 V I = 1.02A
+
+V = 30.0 V I = 1.55A
+
+
+
+Aumentiamo la temperatura del sistema di raffreddamento a 25 gradi 
+
+
+IMPORTANTE! Il secondo panino NON è a vuoto, ma econ foglio cotto senza vuoto (scaldino 5, piastra fredda 2)
+
+
+--------------------- nuovo test julabo dopo cottura a vuoto, sia pasta blu sia film
+
+Updated sensors map
+
+top: 5,3
+bottom: 2,4 
+
+Panino colla blu (scaldino 3, piastra fredda 4). Panino con foglio cotto senza vuoto (scaldino 5, piastra fredda 2)
+
+
+timestamp 1619175261
+
+acceso julabo, settaggio a 25C
+
+pero julabo sta ancora partendo ...
+
+20W per modulo di riscaldamento
+
+1619175926 spengo tutto

@@ -59,6 +59,8 @@ unsigned int loopNO;
 #include <WiFiUdp.h>
 
 // Replace with your network credentials
+const char* ssid0     = "CMSPisa";
+const char* password0 = "silicon2003";
 const char* ssid1     = "tb-e";
 const char* password1 = "";
 const char* ssid2     = "tombocap";
@@ -70,8 +72,8 @@ const char* password4 = "InternetCasaDonat0$";
 const char* ssid5     = "MEGA";
 const char* password5 = "13801879";
 
-const char* ssid     = ssid1;
-const char* password = password1;
+const char* ssid     = ssid0;
+const char* password = password0;
 
 const  char* filename_prefix = "tklog_";
 char file_name[30];
@@ -500,8 +502,8 @@ void setup() {
   M5.Lcd.println ("Hello!! ");
   sleep(2);
 
-  ssid = ssid1;
-  password = password1;
+  ssid = ssid0;
+  password = password0;
 
   Serial.begin(115200);
   Serial.println("In setup");
@@ -518,7 +520,8 @@ void setup() {
   M5.Lcd.print (NTPClientSite);
   M5.Lcd.println();
 
-  int retry = connectWiFi(ssid1, password1);
+  int retry = connectWiFi(ssid0, password0);
+  if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid1, password1);
   if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid2, password2);
   if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid3, password3);
   if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid4, password4);
@@ -939,9 +942,18 @@ String sendSetupSensors() {
   
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";  
-  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+//  ptr += "<meta http-equiv = \"refresh\" content = \"1; url =.\"  />  ";
+  ptr += "<script type = \"text/JavaScript\">\n";
+  ptr += " <!--\n";
+  ptr += "    function AutoRefresh( t ) {\"\n";
+  ptr += "       setTimeout(\"location.reload(true);\", t);\n";
+  ptr += "    }\n";
+  ptr += " //-->\n";
+  ptr += "</script>\n";
+  
   ptr += "</head>\n";
-  ptr += "<body>\n";
+//  ptr += "<body>\n";
+  ptr += "<body  onload = \"JavaScript:AutoRefresh(3000);\">";
   ptr += "Updated sensors map \n <br>";
 
   ptr += "\n<br> top: " + allSensorsUp();

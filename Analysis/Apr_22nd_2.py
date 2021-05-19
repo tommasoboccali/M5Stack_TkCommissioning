@@ -2,7 +2,7 @@ from numpy import genfromtxt
 import matplotlib.pyplot as plt
 import os
 
-infile = '../Data/Apr_22nd.txt'
+infile = '../Data/Apr_22nd_2.txt'
 
 # create log file and data file
 os.system("rm -f tmplog tmpdat")
@@ -12,10 +12,10 @@ os.system("cat "+infile+" | awk '($2 == \"State\"){print}' > tmpdat")
 my_data = genfromtxt('tmpdat', delimiter=' ')
 mystates = {"Off":0, "Initialized":1, "Ready":2,"HeatingOn":3, "HeatingOff":4 ,"DumpResults":5}
 my_curated_data = my_data[:,[0,4,8,9,10,11,12,13,14,15]]
-# test con solo 2 sensori: above =7, below = 3
+# test con solo 2 sensori: above =5, below = 2
 
 
-delta_T_Above_minus_below = ( (my_curated_data[:,9]+my_curated_data[:,9])-(my_curated_data[:,5]+my_curated_data[:,5]) ) / 2
+delta_T_Above_minus_below = ( (my_curated_data[:,7]+my_curated_data[:,7])-(my_curated_data[:,4]+my_curated_data[:,4]) ) / 2
 
 
 # load events
@@ -35,12 +35,12 @@ print (timestamp_moments)
 # 0,1,2,3,4,5,6,7
 # 2,3,4,5,6,7,8,9
 
-#typically ABOVE are sensors 0,2; below sensors 3,5
+#typically ABOVE are sensors 0,2; below sensors 2 5 
 fig, ax = plt.subplots(2)
 
 #sensors
-ax[0].scatter(my_curated_data[:,0],my_curated_data[:,9], label = 'Sensor A-7')
-ax[0].scatter(my_curated_data[:,0],my_curated_data[:,5], label = 'Sensor B-3')
+ax[0].scatter(my_curated_data[:,0],my_curated_data[:,7], label = 'Sensor A-5')
+ax[0].scatter(my_curated_data[:,0],my_curated_data[:,4], label = 'Sensor B-2')
 ax[0].set_ylim([-10,100])
 
 trans = ax[0].get_xaxis_transform()
@@ -60,7 +60,7 @@ ax[0].grid(True)
 ax[1].scatter(my_curated_data[:,0],delta_T_Above_minus_below, label = 'Delta T above-below')
 ax[1].legend()
 ax[1].grid(True)
-ax[1].set_ylim([-4,4])
+ax[1].set_ylim([-8,12])
 
 trans = ax[1].get_xaxis_transform()
 delta = -9
@@ -72,7 +72,7 @@ for i in timestamp_moments:
     if (delta>9):
         delta=-9
 
-plt.savefig("Apr_22nd.png")
+plt.savefig("Apr_22nd_2.png")
 
 
 plt.show()

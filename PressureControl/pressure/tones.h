@@ -25,11 +25,22 @@
 
 
 void alarm(){
-  M5.Speaker.tone(NOTE_DL1, 200); //frequency 3000, with a duration of 200ms
-  M5.Speaker.tone(NOTE_DL2, 200);
-  M5.Speaker.tone(NOTE_DL3, 200);
-  M5.Speaker.tone(NOTE_DL4, 200);
-  M5.Speaker.tone(NOTE_DL5, 200);
-  M5.Speaker.tone(NOTE_DL6, 200);
-  M5.Speaker.tone(NOTE_DL7, 200);
+ // M5.Speaker.tone(NOTE_DL1, 1); //frequency 3000, with a duration of 200ms
+//  sleep(1);
+//  M5.Speaker.tone(NOTE_DL2, 1);
+//  sleep(1);
+//  M5.Speaker.tone(NOTE_DL3, 1);
+//  sleep(1);
+//  M5.Speaker.tone(NOTE_DL4, 1);
+//  sleep(1);
+//  M5.Speaker.tone(NOTE_DL5, 1);
+//  sleep(1);
+//  M5.Speaker.tone(NOTE_DL6, 1);
+//  sleep(1);
+//  M5.Speaker.tone(NOTE_DL7, 1);
+//  sleep(1);
+
+  M5.Speaker.tone(NOTE_DL5, 1);
+  sleep(1);
+  M5.Speaker.tone(NOTE_DL3, 1);
 }

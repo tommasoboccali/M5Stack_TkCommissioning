@@ -248,9 +248,9 @@ void loop() {
     delay(delayTime);
     printStatusOnDisplay();
     server.handleClient();
-    if(bme2.readTemperature()>30) alarm(); //Alarm if ....
+    if((bme2.readPressure()-bme.readPressure())/100.0F > 200 || M5.BtnB.wasPressed()) alarm(); //Alarm if delta pressure is too large
+    M5.update();
 }
-
 
 void printValues(Adafruit_BME280 & bme) {
     Serial.println(sensorDataTxt(bme));

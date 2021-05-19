@@ -20,6 +20,7 @@
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
+#include <M5Stack.h>
 
 #define BME_SCK 13
 #define BME_MISO 12
@@ -35,8 +36,21 @@ Adafruit_BME280 bme(5); // hardware SPI
 unsigned long delayTime;
 
 void setup() {
-    Serial.begin(9600);
-    while(!Serial);    // time to get serial running
+    M5.begin();
+//    Serial.begin(115200);
+//    while(!Serial);    // time to get serial running
+    Serial.println(F("BME280 test"));
+
+    M5.Lcd.fillScreen(WHITE);
+    delay(10);
+    M5.Power.begin();
+    M5.Lcd.clear(BLACK);
+    M5.Lcd.setTextColor(YELLOW);
+    M5.Lcd.setTextSize(1);
+    M5.Lcd.setCursor(0, 0);
+    M5.Lcd.println ("Hello!! ");
+    sleep(0.5);
+
     Serial.println(F("BME280 test"));
 
     unsigned status,status2;
@@ -61,6 +75,10 @@ void setup() {
     delayTime = 1000;
 
     Serial.println();
+
+
+    M5.Lcd.setTextColor(YELLOW);
+
 }
 
 
@@ -70,6 +88,15 @@ void loop() {
     Serial.println("################# 2 ############");
     printValues(bme2);
     delay(delayTime);
+
+   M5.Lcd.clear(BLACK);
+    M5.Lcd.setTextSize(3);
+    M5.Lcd.setCursor(0, 0);
+    auto p1 = bme.readPressure() / 100.0F;
+    auto p2 = bme2.readPressure() / 100.0F;
+    M5.Lcd.println (p1);
+    M5.Lcd.println (p2);
+    M5.Lcd.println (p2-p1);
 }
 
 

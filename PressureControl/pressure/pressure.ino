@@ -33,7 +33,91 @@ Adafruit_BME280 bme2; // I2C
 Adafruit_BME280 bme(5); // hardware SPI
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
 
+#include <WiFi.h>
+
+const char* ssid1     = "CMSPisa";
+const char* password1 = "silicon2003";
+
+const char* ssid2     = "tombocap";
+const char* password2 = "pippo345";
+
+const char* ssid     = ssid1;
+const char* password = password1;
+
 unsigned long delayTime;
+
+
+int connectWiFi (const char* ssid, const char* password){
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+
+    M5.Lcd.println("");
+    M5.Lcd.print(ssid);
+    M5.Lcd.print(".");
+    M5.Lcd.print(password);
+    M5.Lcd.print(".");
+
+    if (password == "") {
+      WiFi.begin(ssid);
+    } else {
+      WiFi.begin(ssid, password);
+    }
+
+    int retry = 10;
+    M5.Lcd.print(".");
+    while (WiFi.status() != WL_CONNECTED && retry>0) {
+      delay(500);
+      M5.Lcd.print(".");
+      Serial.print(".");
+      retry--;
+    }
+    M5.Lcd.println("");
+    return retry;
+}
+
+
+#include <WebServer.h>
+
+WebServer server(80);
+
+
+String sendResult(Adafruit_BME280 & bme, Adafruit_BME280 & bme2) {
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
+  ptr += "<title>Tk Pisa tests</title>\n";
+  ptr += "<meta http-equiv=\"refresh\" content=\"5\" >\n";
+
+  ptr += "<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
+  ptr += "body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
+  ptr += ".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
+  ptr += ".button-on {background-color: #3498db;}\n";
+  ptr += ".button-on:active {background-color: #2980b9;}\n";
+  ptr += ".button-off {background-color: #34495e;}\n";
+  ptr += ".button-off:active {background-color: #2c3e50;}\n";
+  ptr += "p {font-size: 14px;color: #888;margin-bottom: 10px;}\n";
+  ptr += "</style>\n";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
+  ptr += "<h1>ESP32 Web Server</h1>\n";
+  char buffer[100];
+  sprintf(buffer, "IP %s\n", WiFi.localIP().toString().c_str());
+
+  ptr += "<h2>IP ADDRESS: " + String(buffer) + "</h2>\n";
+
+  ptr += "Hello!!!";
+  ptr += "<br>\n";
+
+
+  ptr += "</body>\n";
+  ptr += "</html>\n";
+  return ptr;
+
+}
+
+
+void handle_OnConnect() {
+  server.send(200, "text/html", sendResult(bme, bme2));
+}
 
 void setup() {
     M5.begin();
@@ -49,8 +133,16 @@ void setup() {
     M5.Lcd.setTextSize(1);
     M5.Lcd.setCursor(0, 0);
     M5.Lcd.println ("Hello!! ");
+
     sleep(0.5);
 
+
+    int retry = connectWiFi(ssid1, password1);
+    if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid2, password2);
+//    if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid3, password3);
+//    if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid4, password4);
+//    if (WiFi.status() != WL_CONNECTED) retry = connectWiFi(ssid5, password5);
+    
     Serial.println(F("BME280 test"));
 
     unsigned status,status2;
@@ -76,11 +168,61 @@ void setup() {
 
     Serial.println();
 
-
     M5.Lcd.setTextColor(YELLOW);
 
+    server.on("/", handle_OnConnect);
 }
 
+
+double CalculateDewPoint(const double& temp, const int& humidity) {
+  //taken from https://www.programmersought.com/article/76165000614/
+  if (humidity==0)
+    return temp;
+  double dew_numer = 243.04*(log(double(humidity)/100.0)+((17.625*temp)/(temp+243.04)));
+  double dew_denom = 17.625-log(double(humidity)/100.0)-((17.625*temp)/(temp+243.04));
+  if (dew_numer==0)
+    dew_numer=1;
+  return dew_numer/dew_denom;
+}
+
+void printStatusOnDisplay() { 
+    auto press1 = bme.readPressure() / 100.0F;
+    auto press2 = bme2.readPressure() / 100.0F;
+    auto temp1 = bme.readTemperature();
+    auto temp2 = bme2.readTemperature();
+    auto hum1 = bme.readHumidity();
+    auto hum2 = bme2.readHumidity();
+    auto dew1 = CalculateDewPoint( bme.readTemperature(),  bme.readHumidity());
+    auto dew2 = CalculateDewPoint( bme2.readTemperature(), bme2.readHumidity());
+
+    M5.Lcd.clear(BLACK);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.setCursor(0, 0);
+
+    M5.Lcd.setTextColor(YELLOW);
+    M5.Lcd.println ("Cold box");
+    M5.Lcd.print (String(press2) + " hPa.  ");
+    M5.Lcd.println (String(temp2) + " C");
+    M5.Lcd.print (String(hum2) + "%   Dew: ");
+    M5.Lcd.println (String(dew2) + " C");
+    M5.Lcd.println ("");
+
+    M5.Lcd.setTextColor(MAGENTA);
+    M5.Lcd.println ("Env");
+    M5.Lcd.print (String(press1) + " hPa.  ");
+    M5.Lcd.println (String(temp1) + " C");
+    M5.Lcd.print (String(hum1) + "%   Dew: ");
+    M5.Lcd.println (String(dew1) + " C");
+    M5.Lcd.println ("");
+    
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.setTextSize(4);
+    M5.Lcd.println ("Difference");
+    M5.Lcd.print (String(press2 - press1) + " hPa.  ");
+//    M5.Lcd.println (String(temp2  - temp1) + " C");
+//    M5.Lcd.print (String(hum2 - hum1) + "%. Dew: ");
+//    M5.Lcd.println (String(dew2 - dew2) + " C");
+}
 
 void loop() { 
   Serial.println("################# 1 ############");
@@ -88,15 +230,8 @@ void loop() {
     Serial.println("################# 2 ############");
     printValues(bme2);
     delay(delayTime);
-
-   M5.Lcd.clear(BLACK);
-    M5.Lcd.setTextSize(3);
-    M5.Lcd.setCursor(0, 0);
-    auto p1 = bme.readPressure() / 100.0F;
-    auto p2 = bme2.readPressure() / 100.0F;
-    M5.Lcd.println (p1);
-    M5.Lcd.println (p2);
-    M5.Lcd.println (p2-p1);
+    printStatusOnDisplay();
+    server.handleClient();
 }
 
 

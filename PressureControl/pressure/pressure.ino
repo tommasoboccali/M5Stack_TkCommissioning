@@ -21,6 +21,8 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <M5Stack.h>
+#include "tones.h"
+
 
 #define BME_SCK 13
 #define BME_MISO 12
@@ -82,6 +84,7 @@ WebServer server(80);
 
 
 String sendResult(Adafruit_BME280 & bme, Adafruit_BME280 & bme2) {
+  /*
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
   ptr += "<title>Tk Pisa tests</title>\n";
@@ -104,12 +107,17 @@ String sendResult(Adafruit_BME280 & bme, Adafruit_BME280 & bme2) {
 
   ptr += "<h2>IP ADDRESS: " + String(buffer) + "</h2>\n";
 
-  ptr += "Hello!!!";
-  ptr += "<br>\n";
+  */
 
+  String ptr = String("{");
+  ptr += "\n\"Env\" : ";
+  ptr += sensorDataTxt(bme);
+  ptr += ",\n\"ColdBox\" :  ";
+  ptr += sensorDataTxt(bme2);
+  ptr += ",\n\"Diff\" :  ";
+  ptr += sensorDataDiffTxt(bme, bme2);
+  ptr += "\n}";
 
-  ptr += "</body>\n";
-  ptr += "</html>\n";
   return ptr;
 
 }
@@ -160,7 +168,7 @@ void setup() {
         Serial.print("   ID of 0x56-0x58 represents a BMP 280,\n");
         Serial.print("        ID of 0x60 represents a BME 280.\n");
         Serial.print("        ID of 0x61 represents a BME 680.\n");
-        while (1) delay(10);
+//        while (1) delay(10);
     }
     
     Serial.println("-- Default Test --");
@@ -171,6 +179,8 @@ void setup() {
     M5.Lcd.setTextColor(YELLOW);
 
     server.on("/", handle_OnConnect);
+    server.begin();
+    Serial.println("HTTP Server started.");
 }
 
 
@@ -219,39 +229,49 @@ void printStatusOnDisplay() {
     M5.Lcd.setTextSize(4);
     M5.Lcd.println ("Difference");
     M5.Lcd.print (String(press2 - press1) + " hPa.  ");
+    M5.Lcd.println ("");
+    M5.Lcd.setTextColor(BLUE);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.println (WiFi.localIP());
 //    M5.Lcd.println (String(temp2  - temp1) + " C");
 //    M5.Lcd.print (String(hum2 - hum1) + "%. Dew: ");
 //    M5.Lcd.println (String(dew2 - dew2) + " C");
 }
 
 void loop() { 
-  Serial.println("################# 1 ############");
-    printValues(bme);
-    Serial.println("################# 2 ############");
-    printValues(bme2);
+  Serial.println("################# Env ############");
+    Serial.println(sensorDataTxt(bme));
+    Serial.println("################# Cold box ############");
+    Serial.println(sensorDataTxt(bme2));
+    Serial.println("################# Diff ############");
+    Serial.println(sensorDataDiffTxt(bme, bme2));
     delay(delayTime);
     printStatusOnDisplay();
     server.handleClient();
+    if(bme2.readTemperature()>30) alarm(); //Alarm if ....
 }
 
 
 void printValues(Adafruit_BME280 & bme) {
-    Serial.print("Temperature = ");
-    Serial.print(bme.readTemperature());
-    Serial.println(" °C");
+    Serial.println(sensorDataTxt(bme));
+}
 
-    Serial.print("Pressure = ");
+String sensorDataTxt(Adafruit_BME280 & bme) {
+    String txt = "{";
+    txt += "\n\"Temperature\" : " + String(bme.readTemperature()) + " ,\n"; //#C
+    txt += "\"Pressure\" : " + String(bme.readPressure() / 100.0F) + " ,\n"; //#hPa
+    txt += "\"Humidity\" : " + String(bme.readHumidity()) + ",\n"; // # %
+    txt += "\"DewPoint\" : " + String(CalculateDewPoint(bme.readTemperature(),bme.readHumidity())) + "\n"; //#C
+    txt += "}";
+    return txt; 
+}
 
-    Serial.print(bme.readPressure() / 100.0F);
-    Serial.println(" hPa");
-
-    Serial.print("Approx. Altitude = ");
-    Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
-    Serial.println(" m");
-
-    Serial.print("Humidity = ");
-    Serial.print(bme.readHumidity());
-    Serial.println(" %");
-
-    Serial.println();
+String sensorDataDiffTxt(Adafruit_BME280 & bme1, Adafruit_BME280 & bme2) {
+    String txt = "{";
+    txt += "\n\"Temperature\" : " + String(bme1.readTemperature() - bme2.readTemperature()) + " ,\n"; //#C
+    txt += "\"Pressure\" : " + String(bme1.readPressure() / 100.0F - bme2.readPressure() / 100.0F) + " ,\n"; //#hPa
+    txt += "\"Humidity\" : " + String(bme1.readHumidity() - bme2.readHumidity()) + " ,\n"; //#%
+    txt += "\"DewPoint\" : " + String(CalculateDewPoint(bme1.readTemperature(),bme1.readHumidity()) - CalculateDewPoint(bme2.readTemperature(),bme2.readHumidity())) + "\n"; // #C
+    txt += "}";
+    return txt; 
 }

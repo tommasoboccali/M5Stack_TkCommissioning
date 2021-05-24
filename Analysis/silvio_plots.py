@@ -4,9 +4,10 @@ import os, datetime
 import matplotlib.dates as mdates
 xformatter = mdates.DateFormatter('%H:%M')
 
-sensor_pairs = [(0,3), (2,5)]
+sensor_pairs = [(0,7)] #, (4,7), (2,5)
 #sensors_up = 1,2
 #sensors_down = 3,4
+sensors = [i[0] for i in sensor_pairs] + [i[1] for i in sensor_pairs]
 
 inputFile = '../Data/tklog_1621851072.txt'
 inputFileNew = inputFile.replace(".txt","_data.txt")
@@ -17,7 +18,9 @@ my_data = genfromtxt(inputFileNew, delimiter=' ')
 mystates = {"Off":0, "Initialized":1, "Ready":2,"HeatingOn":3, "HeatingOff":4 ,"DumpResults":5}
 my_curated_data = my_data[:,[0,4,8,9,10,11,12,13,14,15]]
 
-delta_T_Above_minus_below = ( (my_curated_data[:,4]+my_curated_data[:,2])-(my_curated_data[:,7]+my_curated_data[:,5]) ) / 2
+delta_T_Above_minus_below = {}
+for sensor_pair in sensor_pairs:
+    delta_T_Above_minus_below[sensor_pair] = ( my_curated_data[:,sensor_pair[0]+2] - my_curated_data[:,sensor_pair[1]+2] )
 
 ### File timestamp
 timestamp_moments= {    
@@ -43,13 +46,11 @@ fig, ax = plt.subplots(2, figsize=(1600/my_dpi, 882/my_dpi), dpi=my_dpi)
 #sensors
 time = [datetime.datetime.utcfromtimestamp(float(t)) for t in my_curated_data[:,0]]
 #time = my_curated_data[:,0]
-ax[0].plot_date(time,my_curated_data[:,2], label = 'Sensor 0')
-ax[0].plot_date(time,my_curated_data[:,4], label = 'Sensor 2')
-ax[0].plot_date(time,my_curated_data[:,5], label = 'Sensor 3')
-ax[0].plot_date(time,my_curated_data[:,7], label = 'Sensor 5')
+for sensor in sensors:
+    ax[0].plot_date(time,my_curated_data[:,sensor+2], label = 'Sensor %d'%sensor)
 #ax[0].set_ylim([-10,100])
-min_ = min(min(my_curated_data[:,2]),min(my_curated_data[:,4]),min(my_curated_data[:,5]),min(my_curated_data[:,7]))
-max_ = max(max(my_curated_data[:,2]),max(my_curated_data[:,4]),max(my_curated_data[:,5]),max(my_curated_data[:,7]))
+min_ = min([min(my_curated_data[:,i+2]) for i in sensors])
+max_ = max([max(my_curated_data[:,i+2]) for i in sensors])
 binSize = 2
 min_ = binSize*round(min_/binSize-1)
 max_ = binSize*round(max_/binSize+1)
@@ -68,13 +69,16 @@ for i in timestamp_moments:
 ax[0].legend()
 ax[0].grid(True)
 
-ax[1].plot_date(time,delta_T_Above_minus_below, label = 'Delta T above-below')
+for sensor_pair in sensor_pairs:
+    ax[1].plot_date(time,delta_T_Above_minus_below[sensor_pair], label = 'ΔT (#%d - #%d)'%(sensor_pair[0],sensor_pair[1]))
 ax[1].legend()
 ax[1].grid(True)
 #ax[1].set_ylim([-10,10])
+min_ = min([min(delta_T_Above_minus_below[sensor_pair]) for sensor_pair in sensor_pairs])
+max_ = max([max(delta_T_Above_minus_below[sensor_pair]) for sensor_pair in sensor_pairs])
 binSize = 1
-min_ = binSize*round(min(delta_T_Above_minus_below) /binSize -1)
-max_ = binSize*round(max(delta_T_Above_minus_below) /binSize +1)
+min_ = binSize*round(min_ /binSize -1)
+max_ = binSize*round(max_ /binSize +1)
 ax[1].set_ylim([min_ ,max_ ])
 
 trans = ax[1].get_xaxis_transform()

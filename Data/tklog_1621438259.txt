@@ -1,0 +1,10 @@
+1621438259 State Initialized timeState 0 heaters 0000 temp_readings 23.00 23.25 23.19 23.56 23.00 23.06 23.12 23.56 
+1621438261 State Initialized timeState 2 heaters 0000 temp_readings 23.00 23.25 23.25 23.56 23.00 23.12 23.12 23.62 
+1621438262 State Initialized timeState 3 heaters 0000 temp_readings 23.00 23.25 23.25 23.62 23.00 23.12 23.19 23.62 
+1621438263 State Initialized timeState 4 heaters 0000 temp_readings 23.00 23.25 23.25 23.62 23.00 23.12 23.19 23.62 
+1621438264 State Initialized timeState 5 heaters 0000 temp_readings 23.00 23.25 23.25 23.62 23.00 23.12 23.19 23.62 
+1621438265 State Initialized timeState 6 heaters 0000 temp_readings 23.00 23.25 23.25 23.62 23.06 23.12 23.19 23.62 
+1621438266 State Initialized timeState 7 heaters 0000 temp_readings 23.06 23.31 23.25 23.69 23.00 23.12 23.19 23.62 
+1621438267 State Initialized timeState 8 heaters 0000 temp_readings 23.06 23.25 23.25 23.69 23.06 23.12 23.19 23.62 
+1621438268 State Initialized timeState 9 heaters 0000 temp_readings 23.06 23.25 23.25 23.69 23.00 23.19 23.25 23.62 
+1621438269 State Initialized timeState 10 heaters 0000 temp_readings 23.06 23.31 23.25 23.69 23.06 23.12 23.19 23.62 

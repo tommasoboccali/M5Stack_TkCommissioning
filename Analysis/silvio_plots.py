@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os, datetime
 from math import floor, ceil
 import matplotlib.dates as mdates
+from pytz import timezone
 xformatter = mdates.DateFormatter('%H:%M')
 
 os.system("mkdir -p plots")
@@ -46,9 +47,9 @@ for inputFile in sensor_config:
 
     logFile = open(inputFileLog)
     for l in logFile.readlines():
-        timestamp_moments[datetime.datetime.utcfromtimestamp(int(l.split(" Log ")[0]))] = l.split(" Log ")[1].replace("\n","")
+        timestamp_moments[datetime.datetime.utcfromtimestamp(int(l.split(" Log ")[0]))] = l.split(" Log ")[1].replace("\n","") #,timezone('Europe/Amsterdam')
 
-    print(timestamp_moments)
+#    print(timestamp_moments)
 
     ####
 
@@ -109,9 +110,9 @@ for inputFile in sensor_config:
             delta=min_
 
     if title != "":
-        ax[0].set_title(title + " [%s]"%datetime.datetime.fromtimestamp(my_data[0][0]).strftime('%d/%m %H:%M')) 
+        ax[0].set_title(title + " [%s]"%datetime.datetime.utcfromtimestamp(my_data[0][0]).strftime('%d/%m %H:%M')) 
     else:
-        ax[0].set_title("Test %s"%datetime.datetime.fromtimestamp(my_data[0][0]).strftime('%d/%m %H:%M')) 
+        ax[0].set_title("Test %s"%datetime.datetime.utcfromtimestamp(my_data[0][0]).strftime('%d/%m %H:%M')) 
     ax[1].set_xlabel("Time") 
     ax[0].set_ylabel("Temperature [°C]") 
     ax[1].set_ylabel("ΔT [°C]") 
@@ -119,7 +120,7 @@ for inputFile in sensor_config:
     plt.gcf().axes[0].xaxis.set_major_formatter(xformatter)
     plt.gcf().axes[1].xaxis.set_major_formatter(xformatter)
 
-    outFile = "plots/%s.png"%datetime.datetime.fromtimestamp(my_data[0][0]).strftime('%y_%m_%d_%H_%M_%S')
+    outFile = "plots/%s.png"%datetime.datetime.utcfromtimestamp(my_data[0][0]).strftime('%y_%m_%d_%H_%M_%S')
     print("%s saved."%outFile)
     plt.savefig(outFile)
 #    plt.show()

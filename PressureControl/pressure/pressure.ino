@@ -48,6 +48,7 @@ const char* password = password1;
 
 unsigned long delayTime;
 
+float alarmThreshold = 10.;
 
 int connectWiFi (const char* ssid, const char* password){
     Serial.print("Connecting to ");
@@ -233,10 +234,14 @@ void printStatusOnDisplay() {
     M5.Lcd.setTextColor(BLUE);
     M5.Lcd.setTextSize(2);
     M5.Lcd.println (WiFi.localIP());
+    M5.Lcd.setTextColor(ORANGE);
+    M5.Lcd.println ("alarmThreshold = " + String(alarmThreshold));
+    
 //    M5.Lcd.println (String(temp2  - temp1) + " C");
 //    M5.Lcd.print (String(hum2 - hum1) + "%. Dew: ");
 //    M5.Lcd.println (String(dew2 - dew2) + " C");
 }
+
 
 void loop() { 
   Serial.println("################# Env ############");
@@ -248,7 +253,9 @@ void loop() {
     delay(delayTime);
     printStatusOnDisplay();
     server.handleClient();
-    if((bme2.readPressure()-bme.readPressure())/100.0F > 10 || M5.BtnB.wasPressed()) alarm(); //Alarm if delta pressure is too large
+    if(M5.BtnA.wasPressed()) alarmThreshold = alarmThreshold -1;
+    if(M5.BtnC.wasPressed()) alarmThreshold = alarmThreshold +1;
+    if((bme2.readPressure()-bme.readPressure())/100.0F > alarmThreshold || M5.BtnB.wasPressed()) alarm(); //Alarm if delta pressure is too large
     M5.update();
 }
 

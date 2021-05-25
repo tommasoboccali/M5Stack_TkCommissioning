@@ -19,6 +19,9 @@ sensor_config = {
     '../Data/tklog_1621850280.txt': ([(0,7)],""),
     '../Data/tklog_1621850596.txt': ([(0,7)],""),
     '../Data/tklog_1621851072.txt': ([(0,7)],""),
+    '../Data/tklog_1621875533.txt': ([(0,7)],""),
+    '../Data/tklog_1621932290.txt': ([(0,7)],""),
+    '../Data/tklog_1621938103.txt': ([(0,7)],""),
 }
 
 for inputFile in sensor_config:
@@ -121,7 +124,7 @@ for inputFile in sensor_config:
     plt.gcf().axes[1].xaxis.set_major_formatter(xformatter)
 
     outFile = "plots/%s.png"%datetime.datetime.utcfromtimestamp(my_data[0][0]).strftime('%y_%m_%d_%H_%M_%S')
-    print("%s saved."%outFile)
+    print("%s saved, generated from %s"%(outFile,inputFile))
     plt.savefig(outFile)
 #    plt.show()
 

@@ -1,0 +1,2 @@
+1621847049 Log nuovo test con sensore 0 sopra allo scaldino, al centro
+1621847640 Log 17V 1.34A

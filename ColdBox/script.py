@@ -7,7 +7,7 @@ import datetime
 from matplotlib import pyplot as plt 
 import matplotlib.dates as mdates
 url = 'http://192.168.0.70/'
-
+TimeRange = 24 # hours
 xformatter = mdates.DateFormatter('%H:%M')
 
 import urllib.request
@@ -24,15 +24,17 @@ def makePlot(folder):
 	x = []
 	y = []
 	yD = []
+	print("Opening files")
 	for dataFile in sorted(dataFiles):
 		fName = "%s/%s"%(folder, dataFile)
 		#print(fName)
-		if int(dataFile)>int(time.time()-60*60*3):
+		if int(dataFile)>int(time.time()-60*60*TimeRange):
 			data = json.load(open(fName))
 			#x.append(int(dataFile))
 			x.append(datetime.datetime.utcfromtimestamp(int(dataFile)))
 			y.append(data["ColdBox"]["Temperature"])
 			yD.append(data["ColdBox"]["DewPoint"])
+	print("Done")
 	#print(x,y)
 	plt.clf()
 	plt.plot(np.array(x),np.array(y))
@@ -50,14 +52,15 @@ def makePlot(folder):
 while True:
 	timestamp = int(time.time())
 	#download data
-	wget.download(url, "%s/%d"%(folder, timestamp))
 	#make plot
 	plt = makePlot(folder)
 	print()
-	print("updating plot...")
+	print("mygraph.png saved.")
 	plt.savefig("mygraph.png")
+	wget.download(url, "%s/%d"%(folder, timestamp))
 	#plt.show()
 	time.sleep(20)
+	print("updating plot...")
 
 
 

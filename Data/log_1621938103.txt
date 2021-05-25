@@ -1,0 +1,5 @@
+1621938113 Log sensor 1 and 3 connected to dry contact
+1621938139 Log 4 modules, 19.5 V 2A
+1621938358 Log chaning julabo set point to 15
+1621939262 Log julabo set point -20
+1621946519 Log julabo -48

@@ -1,0 +1,20 @@
+{
+"Env" : {
+"Temperature" : 25.37 ,
+"Pressure" : 1021.23 ,
+"Humidity" : 35.07,
+"DewPoint" : 8.80
+},
+"ColdBox" :  {
+"Temperature" : -26.56 ,
+"Pressure" : 1024.69 ,
+"Humidity" : 4.21,
+"DewPoint" : -56.85
+},
+"Diff" :  {
+"Temperature" : 51.93 ,
+"Pressure" : -3.46 ,
+"Humidity" : 30.86 ,
+"DewPoint" : 65.65
+}
+}

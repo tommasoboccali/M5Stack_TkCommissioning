@@ -9,7 +9,15 @@ xformatter = mdates.DateFormatter('%H:%M')
 os.system("mkdir -p plots")
 
 sensor_config = {
-    '../Data/tklog_1619104693.txt': ([(7,3),],""), #(0,1),(2,4),(5,6)
+    '../Data/tklog_1619104693.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6) 
+    '../Data/tklog_1619105936.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6)
+    '../Data/tklog_1619106339.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6)
+    '../Data/tklog_1619107077.txt': ([(7,3),(0,1),(2,4),(5,6)],"raffreddamento"), #(0,1),(2,4),(5,6)
+    '../Data/tklog_1619107186.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
+    '../Data/tklog_1619107964.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
+    '../Data/tklog_1619108587.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
+    '../Data/tklog_1619109439.txt': ([(5,2),],"raffreddamento"), #(0,1),(3,4),(6,7)
+
 #    '../Data/tklog_1621846908.txt': ([(0,7)],""),
 #    '../Data/tklog_1621847007.txt': ([(0,7)],""),
 #    '../Data/tklog_1621848040.txt': ([(0,7)],""),

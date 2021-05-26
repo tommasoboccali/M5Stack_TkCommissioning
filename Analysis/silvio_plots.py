@@ -102,15 +102,15 @@ sensor_config = {
 #### primi test (Apr 21)
 #    '../Data/tklog_1618996352.txt': ([(0,1),(2,3),(4,5),(6,7),],""),
 #    
-#### primi test con i sensori avvitati sul modulo (Apr 22)
-#    '../Data/tklog_1619104693.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6) 
-#    '../Data/tklog_1619105936.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6)
-#    '../Data/tklog_1619106339.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6)
-#    '../Data/tklog_1619107077.txt': ([(7,3),(0,1),(2,4),(5,6)],"raffreddamento"), #(0,1),(2,4),(5,6)
-#    '../Data/tklog_1619107186.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
-#    '../Data/tklog_1619107964.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
-#    '../Data/tklog_1619108587.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
-#    '../Data/tklog_1619109439.txt': ([(5,2),],"raffreddamento"), #(0,1),(3,4),(6,7)
+### primi test con i sensori avvitati sul modulo (Apr 22)
+    '../Data/tklog_1619104693.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6) 
+    '../Data/tklog_1619105936.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6)
+    '../Data/tklog_1619106339.txt': ([(7,3),],"colla blu, sensori avvitati"), #(0,1),(2,4),(5,6)
+    '../Data/tklog_1619107077.txt': ([(7,3),(0,1),(2,4),(5,6)],"raffreddamento"), #(0,1),(2,4),(5,6)
+    '../Data/tklog_1619107186.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
+    '../Data/tklog_1619107964.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
+    '../Data/tklog_1619108587.txt': ([(5,2),],"panino secco, sensori avvitati"), #(0,1),(3,4),(6,7)
+    '../Data/tklog_1619109439.txt': ([(5,2),],"raffreddamento"), #(0,1),(3,4),(6,7)
 
 #### primi test con il julabo (Apr 23) - inutile, piastre scaccate a causa della vite ###
 #    '../Data/tklog_1619166827.txt': ([(5,2),(3,4),(1,6),(0,7),],"test inutile (piastre distaccate a causa della vite)"),
@@ -137,40 +137,40 @@ sensor_config = {
 #    '../Data/tklog_1621439089.txt': ([(2,0),(2,1)],"niente"),
 #    '../Data/tklog_1621439794.txt': ([(2,0),(2,1)],"niente"),
 #    '../Data/tklog_1621440013.txt': ([(2,0),(2,1)],"work in progress"),
-    '../Data/tklog_1621440159.txt': ([(2,0),(2,1)],""),
-    '../Data/tklog_1621442300.txt': ([(2,0),(2,1)],""),
+    '../Data/tklog_1621440159.txt': ([(2,0),(2,1)],"sensore sotto al sensore vs sensore sotto allo scaldino "),
+    '../Data/tklog_1621442300.txt': ([(2,0),(2,1)],"sensore sotto al sensore vs sensore sotto allo scaldino "),
 
-### test con il julabo (May 21) ###
-    '../Data/tklog_1621592934.txt': ([(5,2),(3,4),],"niente"),
-    '../Data/tklog_1621597071.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621608807.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621610316.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621610372.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621611018.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621614135.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621614450.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621616484.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621617011.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621617305.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621617551.txt': ([(5,2),(3,4),],""),
-    '../Data/tklog_1621617785.txt': ([(5,2),(3,4),],""),
+#### test con il julabo (May 21) ###
+#    '../Data/tklog_1621592934.txt': ([(5,2),(3,4),],"niente"),
+#    '../Data/tklog_1621597071.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621608807.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621610316.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621610372.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621611018.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621614135.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621614450.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621616484.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621617011.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621617305.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621617551.txt': ([(5,2),(3,4),],""),
+#    '../Data/tklog_1621617785.txt': ([(5,2),(3,4),],""),
 
 ## test con il julabo (May 24) ###
     '../Data/tklog_1621846908.txt': ([(0,7),(6,5)],"niente"),
-    '../Data/tklog_1621847007.txt': ([(0,7),(6,5)],""),
-    '../Data/tklog_1621848040.txt': ([(0,7),(6,5)],""),
-    '../Data/tklog_1621848543.txt': ([(0,7),(6,5)],""),
-    '../Data/tklog_1621848738.txt': ([(0,7),(6,5)],""),
+    '../Data/tklog_1621847007.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
+    '../Data/tklog_1621848040.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
+    '../Data/tklog_1621848543.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
+    '../Data/tklog_1621848738.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
     '../Data/tklog_1621849015.txt': ([(0,7),(6,5)],"raffreddamento"),
     '../Data/tklog_1621849264.txt': ([(0,7),(6,5)],"niente"),
     '../Data/tklog_1621850280.txt': ([(0,7),(6,5)],"niente"),
-    '../Data/tklog_1621850596.txt': ([(0,7),(6,5)],""),
-    '../Data/tklog_1621851072.txt': ([(0,7),(6,5)],""),
-    '../Data/tklog_1621875533.txt': ([(0,7),(6,5)],""),
+    '../Data/tklog_1621850596.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
+    '../Data/tklog_1621851072.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
+    '../Data/tklog_1621875533.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
 
 ## test con il julabo (May 25) ###
-    '../Data/tklog_1621932290.txt': ([(0,7),(6,5)],""),
-    '../Data/tklog_1621938103.txt': ([(0,7),(6,5),(1,3)],""),
+    '../Data/tklog_1621932290.txt': ([(0,7),(6,5)],"laird vecchio vs nuovo"),
+    '../Data/tklog_1621938103.txt': ([(0,7),(6,5),(1,3)],"laird vecchio vs nuovo vs panino vuoto"),
 }
 
 for inputFile in sensor_config:

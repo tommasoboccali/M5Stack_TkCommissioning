@@ -59,6 +59,14 @@ void printAddress(const uint8_t deviceAddress[]){
   }
 }
 
+void printAddressDisplay(const uint8_t deviceAddress[]){
+  for (uint8_t i = 0; i < SENSADDRLENGHT; i++)
+  {
+    if (deviceAddress[i] < 16) Serial.print("0");
+    M5.Lcd.print(deviceAddress[i], HEX);
+    M5.Lcd.print(" ");
+  }
+}
 
 void delayBadSensor(const byte addr[SENSADDRLENGHT]){
     if(addr[7] == byte(0x27)) {
@@ -99,22 +107,37 @@ void setupTemperature(void){
   uint8_t sensorFoundAddress[SENSADDRLENGHT];
   uint8_t nSensors = sensors.getDeviceCount();
   Serial.println("Found sensors with address: ");
+  M5.Lcd.println("Found sensors with address: ");
+  bool newSensor = false;
   for(size_t i=0; i<nSensors; i++){
       sensors.getAddress(sensorFoundAddress, i);
       Serial.println("");
       printAddress(sensorFoundAddress);
+//      printAddressDisplay(sensorFoundAddress);
       Serial.println("Setting highest resolution");
       sensors.setResolution(sensorFoundAddress, 12);
       Serial.println("");
       if(!isInSensorAddressList(sensorFoundAddress)){
+        newSensor = true;
 //        printAlarm("NEW SENSOR FOUND");
         Serial.println("############ NEW SENSOR FOUND #######################################");
         Serial.println("############ Please add the address into the list SENSOR FOUND ######");
         printAddress(sensorFoundAddress);
+        M5.Lcd.println("");
+        printAddressDisplay(sensorFoundAddress);
         Serial.println("#####################################################################");
         Serial.println("");      
       }
   }
+  if(newSensor){
+    M5.update();
+    delay(100);
+   M5.Lcd.println("Press a button to continue");
+   while (!M5.BtnA.wasPressed() && !M5.BtnB.wasPressed() && !M5.BtnC.wasPressed()) {
+    delay(100);
+    M5.update();
+  }
+ }
 }
 
 

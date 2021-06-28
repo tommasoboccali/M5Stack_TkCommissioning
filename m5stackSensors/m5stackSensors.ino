@@ -330,6 +330,7 @@ void printResult(Result r) {
     if(isASensorUp(i)) M5.Lcd.setTextColor(RED);
     else if(isASensorDown(i)) M5.Lcd.setTextColor(MAGENTA);
     else M5.Lcd.setTextColor(GREEN);
+    if (i<10) M5.Lcd.print(" ");
     M5.Lcd.print(i);
     M5.Lcd.print(":");
     M5.Lcd.print(r.sensorReadings[i]);
@@ -345,7 +346,7 @@ void printResult(Result r) {
   M5.Lcd.setTextColor(GREEN);
   temp[NUMRELAYS] = '\0';
 
-  M5.Lcd.println();
+//  M5.Lcd.println();
   M5.Lcd.setTextColor(RED);
   M5.Lcd.print("Up: ");
   M5.Lcd.print(r.avgtemp_up);
